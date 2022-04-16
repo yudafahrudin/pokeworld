@@ -53,6 +53,7 @@ function Home() {
     }
 
     useEffect(() => {
+        // initialize first reload page
         getPokemonList({
             variables: {
                 limit,

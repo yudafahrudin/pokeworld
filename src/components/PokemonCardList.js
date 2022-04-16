@@ -4,8 +4,21 @@ import { css } from '@emotion/css'
 
 import { countMyPokemon } from '../helpers'
 
-function PokemonCardList({ pokemon, showOwnedPokemon = true }) {
+function PokemonCardList({ pokemon, showOwnedPokemon = true, bgColor }) {
     const navigate = useNavigate();
+
+    const enumColor = () => {
+        switch (bgColor) {
+            case "primary":
+                return { bgColor: "#339DE8", fontColor: "white" };
+            case "default":
+                return { bgColor: "#F5F5F5", fontColor: "black" };
+            case "warning":
+                return { bgColor: "#E3C446", fontColor: "black" };
+            default:
+                return { bgColor: "#ffffff", fontColor: "black" };
+        }
+    }
 
     const handleRedirectPokemonDetail = (pokemonData) => {
         const { name, image, dreamworld } = pokemonData;
@@ -21,6 +34,7 @@ function PokemonCardList({ pokemon, showOwnedPokemon = true }) {
             border-radius:10px;
             margin: 0 auto 10px auto;
             box-shadow: rgba(9, 30, 66, 0.25) 0px 3px 4px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+            background-color: ${enumColor().bgColor}
             `}
             onClick={() => handleRedirectPokemonDetail({
                 name: pokemon.name,

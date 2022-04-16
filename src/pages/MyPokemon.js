@@ -44,6 +44,7 @@ function Mypokemon() {
                             return (
                                 <PokemonCardList
                                     pokemon={pokemon}
+                                    bgColor="default"
                                     showOwnedPokemon={false}
                                     key={index + `pokemon-list`}
                                 />
