@@ -167,7 +167,10 @@ function Home() {
                 </div> */}
             </ul>
             {
-                isFetching && <p>please wait</p>
+                isFetching && <div className={
+                    css`text-align: center;
+                    margin: 0 0 30px 0;`
+                }><p className={css`color:#dadad3`}>please wait...</p></div>
             }
         </>
 
