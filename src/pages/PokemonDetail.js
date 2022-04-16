@@ -3,15 +3,19 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { css } from '@emotion/css'
 
+// Component
 import { Button, Modal } from '../components'
 
+// GraphQL
 import {
     GET_POKEMON_DETAIL
 } from "../graphql/queries"
 
+// Helper
 import { localStorage, countMyPokemon } from '../helpers'
 
 function PokemonDetail() {
+    // Constant
     const params = useParams();
     const [searchParams] = useSearchParams();
     const pokemonImageBase64 = searchParams.get('image');
@@ -19,8 +23,10 @@ function PokemonDetail() {
     const pokemonImageUrl = pokemonImageBase64 ? atob(pokemonImageBase64) : null;
     const pokemonDreamworldUrl = pokemonDreamworldBase64 ? atob(pokemonDreamworldBase64) : null;
 
+    // Presist
     const [getMyPokemons, setMyPokemons] = localStorage("mypokemon");
 
+    // State
     const [isOpen, setIsOpen] = useState(false);
     const [loadingCatch, setLoadingCatch] = useState(false);
     const [totalOwnedPokemon, setTotalOwnedPokemon] = useState(0);
@@ -28,7 +34,7 @@ function PokemonDetail() {
     const [isMultipleCatch, setIsMultipleCatch] = useState(false);
 
     const { loading, data } = useQuery(GET_POKEMON_DETAIL, {
-        fetchPolicy: "network-only",
+        fetchPolicy: "cache-first",
         variables: {
             name: params.name
         }
@@ -43,9 +49,13 @@ function PokemonDetail() {
     }
 
     const handleOwnedSamePokemon = () => {
-        const isExistingPokemon = getMyPokemons().every(pokemon =>
-            pokemon.name === data?.pokemon?.name
-        );
+        let isExistingPokemon = false;
+
+        if (getMyPokemons().length) {
+            isExistingPokemon = getMyPokemons().every(pokemon =>
+                pokemon.name === data?.pokemon?.name
+            );
+        }
 
         if (isExistingPokemon) {
             setIsMultipleCatch(true)

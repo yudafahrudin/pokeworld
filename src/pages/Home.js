@@ -24,8 +24,8 @@ function Home() {
         }
     })
 
-    const ImageMemo = ({ src, key }) => (React.useMemo(() => {
-        return <img src={src} key={key} />
+    const ImageMemo = ({ src }) => (React.useMemo(() => {
+        return <img src={src} />
     }))
 
     useEffect(() => {
@@ -68,10 +68,11 @@ function Home() {
         navigate(`/pokemon-detail/${name}?image=${btoa(image)}&dreamworld=${btoa(dreamworld)}`)
     }
 
-    const PokemonCardList = ({ pokemon, key }) => {
+    const PokemonCardList = ({ pokemon }) => {
         return (
-            <div key={key} className={css`
-                width:98%;
+            <li
+                className={css`
+                width:100%;
                 display:flex;
                 cursor: pointer;
                 border-radius:10px;
@@ -90,7 +91,7 @@ function Home() {
                     width:100px;
                     max-width:100px;
                     `}>
-                    <ImageMemo src={pokemon.image} key={key} />
+                    <ImageMemo src={pokemon.image} />
                     {/* <img
                         className={css`
                         transition: all .5s;
@@ -122,7 +123,7 @@ function Home() {
                         you've owned: {countMyPokemon(pokemon.name)}
                     </p>
                 </div>
-            </div>
+            </li>
         )
     }
 
@@ -138,13 +139,16 @@ function Home() {
             <ul>
                 {
                     pokemonList.length ? (
-                        pokemonList.map((pokemon, index) => (
-                            <PokemonCardList
-                                pokemon={pokemon}
-                                key={index}
-                            />
-                        ))
-                    ) : <p className={css`font-size:14px;padding:5px;color:#dadad3`}>data not found</p>
+                        pokemonList.map((pokemon, index) => {
+                            return (
+                                <PokemonCardList
+                                    pokemon={pokemon}
+                                    key={index + `pokemon-list`}
+                                />
+                            )
+                        }
+                        )
+                    ) : <p className={css`font-size:14px;padding:5px;color:#dadad3`}>Please wait...</p>
                 }
                 {/* <div className={
                     css`
