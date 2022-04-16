@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { css } from '@emotion/css'
 
@@ -16,7 +15,6 @@ const pageDetail = css`
 function Home() {
     const limit = 5;
     const offset = 0;
-    const navigate = useNavigate();
     const [pokemonList, setPokemonList] = useState([])
     const [isFetching, setIsFetching] = useState(false)
 
@@ -27,10 +25,6 @@ function Home() {
             setIsFetching(false);
         }
     })
-
-    const ImageMemo = ({ src }) => (React.useMemo(() => {
-        return <img src={src} />
-    }))
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
