@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { css, cx } from '@emotion/css'
 
-import { WaitingText, PokemonCardList } from '../components'
+import { PokemonCardList, Button, Modal } from '../components'
 
 import { localStorage } from '../helpers'
 
@@ -14,14 +14,70 @@ const textCapacity = css`
     font-weight:bold;
     font-size:15px;
 `
+const modalContainer = css`
+    width:80vw;
+    max-height:50vh;
+    max-width:90vw;
+    display:block;
+    padding:10px;
+    margin:auto;
+    border-radius:10px;
+    background:#ffffff;
+    text-align:center;
+`
 
 function Mypokemon() {
-    const [getMyPokemons] = localStorage("mypokemon");
+    const [getMyPokemons, setMyPokemons] = localStorage("mypokemon");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [idPokemon, setIdPokemon] = useState(0);
 
     const countCapacity = () => {
         const earlyWarning = (POCKET_CAPACITY - 2);
         return `color:${earlyWarning <= getMyPokemons().length ? "red" : "green"}}`
     }
+
+    const handleOpenModal = (id) => {
+        setIsModalOpen(true)
+        setIdPokemon(id)
+    }
+
+    const handleReleasePokemon = () => {
+        if (Boolean(idPokemon)) {
+            const notReleasedPokemon = getMyPokemons().filter(pokemon => pokemon.id !== idPokemon);
+            setMyPokemons(notReleasedPokemon);
+            setIsModalOpen(false)
+            setIdPokemon(0);
+        }
+    }
+
+    const ModalConfirm = () => (
+        <Modal
+            isOpen={isModalOpen}
+        >
+            <div className={modalContainer}>
+                <h3>
+                    CONFIRMATION
+                </h3>
+                <div className={css`margin-bottom:10px`}>
+                    <Button
+                        bgColor="warning"
+                        onClick={() => handleReleasePokemon()}
+                    >
+                        Release Pokemon
+                    </Button>
+                    <Button
+                        bgColor="default"
+                        style={css`
+                        margin-left:10px
+                        `}
+                        onClick={() => setIsModalOpen(false)}
+                    >
+                        cancel
+                    </Button>
+                </div>
+            </div>
+        </Modal>
+    )
 
     return (
         <div
@@ -42,18 +98,38 @@ function Mypokemon() {
                     getMyPokemons().length ? (
                         getMyPokemons().map((pokemon, index) => {
                             return (
-                                <PokemonCardList
-                                    pokemon={pokemon}
-                                    bgColor="default"
-                                    showOwnedPokemon={false}
-                                    key={index + `pokemon-list`}
-                                />
+                                <div key={index}>
+                                    <PokemonCardList
+                                        pokemon={pokemon}
+                                        bgColor="default"
+                                        showOwnedPokemon={false}
+                                    />
+                                    <div
+                                        className={css`
+                                        margin-bottom:30px;
+                                        `}
+                                    >
+                                        <Button
+                                            onClick={() => handleOpenModal(pokemon.id)}
+                                            bgColor="warning"
+                                        >
+                                            Release {pokemon.name}
+                                        </Button>
+                                        <Button
+                                            bgColor="default"
+                                            style={css`margin-left:20px`}
+                                        >
+                                            Rename pokemon
+                                        </Button>
+                                    </div>
+                                </div>
                             )
                         }
                         )
-                    ) : <WaitingText />
+                    ) : <p>You don't have pokemon, go to catch <a href="/">pokemon</a></p>
                 }
             </ul>
+            <ModalConfirm />
         </div >
     )
 }

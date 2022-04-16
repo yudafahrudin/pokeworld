@@ -18,6 +18,7 @@ export const GET_POKEMON_LIST = gql`
 export const GET_POKEMON_DETAIL = gql`
 query pokemon_detail($name: String!) {
   pokemon(name: $name) {
+    id,
     name,
     height,
     weight,

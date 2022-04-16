@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 import { css } from '@emotion/css'
 
 // Component
-import { Button, Modal, WaitingText } from '../components'
+import { Button, Modal, WaitingText, FormInput } from '../components'
 
 // GraphQL
 import {
@@ -82,14 +82,15 @@ function PokemonDetail() {
 
     const handleAddToPocket = () => {
         if (!isMultipleCatch) {
-            setMyPokemons(JSON.stringify(
+            setMyPokemons(
                 [...getMyPokemons(), {
                     nickname,
+                    id: data?.pokemon?.id,
                     image: pokemonImageUrl,
                     name: data?.pokemon?.name,
                     dreamworld: pokemonDreamworldUrl
                 }
-                ]))
+                ])
             setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
             setLoadingCatch(false)
             setModalIsOpen(false);
@@ -140,7 +141,14 @@ function PokemonDetail() {
                 <div className={
                     css`margin-bottom:10px`
                 }>
-                    <input
+                    <FormInput
+                        key={"Sdasdsadsasa"}
+                        value={nickname}
+                        onChange={handleInputChange}
+                        placeholder="Give A Nickname"
+                    />
+
+                    {/* <input
                         className={
                             css`
                                     border-radius:10px;
@@ -160,7 +168,7 @@ function PokemonDetail() {
                         onChange={handleInputChange}
                         id="nickname-input"
                         placeholder="Give A Nickname"
-                    />
+                    /> */}
                     {
                         isMultipleCatch && (
                             <div>
@@ -173,13 +181,15 @@ function PokemonDetail() {
                     }
                 </div>
                 <div className={css`margin-bottom:10px`}>
-                    <Button onClick={handleAddToPocket}>
+                    <Button bgColor="primary" onClick={handleAddToPocket}>
                         Add to my pocket
                     </Button>
                     <Button
+                        bgColor="warning"
                         style={css`
                             margin-left:10px
                             `}
+
                         onClick={handleRelease}
                     >
                         Release
@@ -241,11 +251,11 @@ function PokemonDetail() {
                                 <Button
                                     onClick={handleCatchPokemon}
                                     disabled={loadingCatch}
+                                    bgColor="primary"
                                     style={
                                         css`
-                                        width:60px;
-                                        font-size:12px;
                                         right:0;
+                                        width:60px;
                                         position:absolute;
                                         height:35px !important;
                                         `

@@ -7,7 +7,7 @@ const localStorage = (key) => {
     }
 
     const setValue = (value = []) => {
-        window.localStorage.setItem(globalKey, JSON.stringify(value));
+        window.localStorage.setItem(globalKey, JSON.stringify(JSON.stringify(value)));
     }
 
     return [getValue, setValue]
