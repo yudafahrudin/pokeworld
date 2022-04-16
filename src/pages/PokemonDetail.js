@@ -25,6 +25,7 @@ function PokemonDetail() {
     const [loadingCatch, setLoadingCatch] = useState(false);
     const [totalOwnedPokemon, setTotalOwnedPokemon] = useState(0);
     const [nickname, setNickname] = useState("");
+    const [isMultipleCatch, setIsMultipleCatch] = useState(false);
 
     const { loading, data } = useQuery(GET_POKEMON_DETAIL, {
         fetchPolicy: "network-only",
@@ -37,28 +38,47 @@ function PokemonDetail() {
         setLoadingCatch(true);
         setTimeout(() => {
             setIsOpen(true);
+            handleOwnedSamePokemon()
         }, 2000)
     }
 
-    const handleAddToPocket = () => {
-        setMyPokemons(JSON.stringify(
-            [...getMyPokemons(), {
-                nickname,
-                image: pokemonImageUrl,
-                name: data?.pokemon?.name,
-                dreamworld: pokemonDreamworldUrl
-            }
-            ]))
-        setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
-        setLoadingCatch(false)
-        setIsOpen(false);
+    const handleOwnedSamePokemon = () => {
+        const isExistingPokemon = getMyPokemons().every(pokemon =>
+            pokemon.name === data?.pokemon?.name
+        );
+
+        if (isExistingPokemon) {
+            setIsMultipleCatch(true)
+        }
     }
+
+    const handleAddToPocket = () => {
+        if (!isMultipleCatch) {
+            setMyPokemons(JSON.stringify(
+                [...getMyPokemons(), {
+                    nickname,
+                    image: pokemonImageUrl,
+                    name: data?.pokemon?.name,
+                    dreamworld: pokemonDreamworldUrl
+                }
+                ]))
+            setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
+            setLoadingCatch(false)
+            setIsOpen(false);
+        }
+    }
+
     const handleRelease = () => {
         setLoadingCatch(false)
         setIsOpen(false);
     }
 
     const handleInputChange = (event) => {
+        if (event.target.value) {
+            setIsMultipleCatch(false);
+        } else {
+            setIsMultipleCatch(true);
+        }
         setNickname(event.target.value ?? "")
     }
 
@@ -91,9 +111,10 @@ function PokemonDetail() {
                 <div className={
                     css`
                     width:80vw;
-                    height:40vh;
+                    max-height:50vh;
                     max-width:90vw;
                     display:block;
+                    padding:10px;
                     margin:auto;
                     border-radius:10px;
                     background:#ffffff;
@@ -130,11 +151,20 @@ function PokemonDetail() {
                             type="text"
                             onChange={handleInputChange}
                             id="nickname-input"
-                            name="nickname-input"
                             placeholder="Give A Nickname"
                         />
+                        {
+                            isMultipleCatch && (
+                                <div>
+                                    <p className={css`font-size:14px;color:red`}>
+                                        You already have bulbasour.
+                                        <br /> Please give it a name.
+                                    </p>
+                                </div>
+                            )
+                        }
                     </div>
-                    <div>
+                    <div className={css`margin-bottom:10px`}>
                         <Button onClick={handleAddToPocket}>
                             Add to my pocket
                         </Button>

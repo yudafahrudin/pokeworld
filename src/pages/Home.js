@@ -4,10 +4,6 @@ import { useLazyQuery } from "@apollo/client";
 import { css } from '@emotion/css'
 
 import {
-    Button
-} from '../components'
-
-import {
     GET_POKEMON_LIST
 } from '../graphql/queries'
 
@@ -20,7 +16,7 @@ function Home() {
     const [pokemonList, setPokemonList] = useState([])
     const [isFetching, setIsFetching] = useState(false)
 
-    const [getPokemonList, { loading, data }] = useLazyQuery(GET_POKEMON_LIST, {
+    const [getPokemonList, { data }] = useLazyQuery(GET_POKEMON_LIST, {
         fetchPolicy: "cache-first",
         onCompleted: data => {
             setPokemonList(prevState => ([...prevState, ...data.pokemons.results]))
