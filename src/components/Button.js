@@ -5,7 +5,8 @@ function Button({ children, fullWidth, disabled, style = css``, onClick }) {
   const defaultCss = css`
     ${style}
     width: ${fullWidth && "100%"};
-    height: 50px;
+    max-height: 50px;
+    padding:10px;
     border: none;
     border-radius: 10px;
     background:#339DE8;

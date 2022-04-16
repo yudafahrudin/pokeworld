@@ -1,14 +1,20 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { css } from '@emotion/css'
+
+import { WaitingText, PokemonCardList } from '../components'
 
 import {
     GET_POKEMON_LIST
 } from '../graphql/queries'
 
-import { countMyPokemon } from '../helpers/index'
+import { countMyPokemon } from '../helpers'
 
+const pageDetail = css`
+    font-size:.85rem;
+    padding:5px;
+`
 function Home() {
     const limit = 5;
     const offset = 0;
@@ -68,71 +74,68 @@ function Home() {
         navigate(`/pokemon-detail/${name}?image=${btoa(image)}&dreamworld=${btoa(dreamworld)}`)
     }
 
-    const PokemonCardList = ({ pokemon }) => {
-        return (
-            <li
-                className={css`
-                width:100%;
-                display:flex;
-                cursor: pointer;
-                border-radius:10px;
-                margin: 0 auto 10px auto;
-                box-shadow: rgba(9, 30, 66, 0.25) 0px 3px 4px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
-                `}
-                onClick={() => handleRedirectPokemonDetail({
-                    name: pokemon.name,
-                    image: pokemon.image,
-                    dreamworld: pokemon.dreamworld
-                })}>
-                <div className={css`
-                    border-radius:10px;
-                    padding:5px;
-                    height:100px;
-                    width:100px;
-                    max-width:100px;
-                    `}>
-                    <ImageMemo src={pokemon.image} />
-                    {/* <img
-                        className={css`
-                        transition: all .5s;
-                        `}
-                        src={pokemon.image}
-                        width={"100%"}
-                        height={"auto"}
-                        alt={pokemon.name}
-                    /> */}
-                </div>
-                <div
-                    className={
-                        css`
-                        padding:10px
-                        `
-                    }
-                >
-                    <h3 className={
-                        css`
-                            margin-bottom: .5em;
-                            text-transform: capitalize;
-                            `
-                    }>
-                        {pokemon.name}
-                    </h3>
-                    <p className={css`
-                        font-size: .745rem;
-                        `}>
-                        you've owned: {countMyPokemon(pokemon.name)}
-                    </p>
-                </div>
-            </li>
-        )
-    }
+    // const PokemonCardList = ({ pokemon }) => {
+    //     return (
+    //         <li
+    //             className={css`
+    //             width:100%;
+    //             display:flex;
+    //             cursor: pointer;
+    //             border-radius:10px;
+    //             margin: 0 auto 10px auto;
+    //             box-shadow: rgba(9, 30, 66, 0.25) 0px 3px 4px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+    //             `}
+    //             onClick={() => handleRedirectPokemonDetail({
+    //                 name: pokemon.name,
+    //                 image: pokemon.image,
+    //                 dreamworld: pokemon.dreamworld
+    //             })}>
+    //             <div className={css`
+    //                 border-radius:10px;
+    //                 padding:5px;
+    //                 height:100px;
+    //                 width:100px;
+    //                 max-width:100px;
+    //                 `}>
+    //                 <ImageMemo src={pokemon.image} />
+    //                 {/* <img
+    //                     className={css`
+    //                     transition: all .5s;
+    //                     `}
+    //                     src={pokemon.image}
+    //                     width={"100%"}
+    //                     height={"auto"}
+    //                     alt={pokemon.name}
+    //                 /> */}
+    //             </div>
+    //             <div
+    //                 className={
+    //                     css`
+    //                     padding:10px
+    //                     `
+    //                 }
+    //             >
+    //                 <h3 className={
+    //                     css`
+    //                         margin-bottom: .5em;
+    //                         text-transform: capitalize;
+    //                         `
+    //                 }>
+    //                     {pokemon.name}
+    //                 </h3>
+    //                 <p className={css`
+    //                     font-size: .745rem;
+    //                     `}>
+    //                     you've owned: {countMyPokemon(pokemon.name)}
+    //                 </p>
+    //             </div>
+    //         </li>
+    //     )
+    // }
 
     return (
         <>
-            <p className={css`
-            font-size:.85rem;
-            padding:5px;
-            `}>
+            <p className={pageDetail}>
                 Welcome Traine~ the Pokeworld contains detailed stats for every creature
                 from the pokemon world.
             </p>
@@ -148,29 +151,11 @@ function Home() {
                             )
                         }
                         )
-                    ) : <p className={css`font-size:14px;padding:5px;color:#dadad3`}>Please wait...</p>
+                    ) : <WaitingText />
                 }
-                {/* <div className={
-                    css`
-                    width:98%;
-                    margin:auto;
-                    margin-top:15px;
-                    `
-                }>
-                    <Button
-                        fullWidth
-                        disabled={loading}
-                        onClick={loadMore}
-                    >
-                        {loading ? "please wait" : "load more"}
-                    </Button>
-                </div> */}
             </ul>
             {
-                isFetching && <div className={
-                    css`text-align: center;
-                    margin: 0 0 30px 0;`
-                }><p className={css`color:#dadad3`}>please wait...</p></div>
+                isFetching && <WaitingText />
             }
         </>
 

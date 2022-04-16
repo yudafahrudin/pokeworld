@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 import { css } from '@emotion/css'
 
 // Component
-import { Button, Modal } from '../components'
+import { Button, Modal, WaitingText } from '../components'
 
 // GraphQL
 import {
@@ -14,8 +14,21 @@ import {
 // Helper
 import { localStorage, countMyPokemon } from '../helpers'
 
+const modalContainer = css`
+    width:80vw;
+    max-height:50vh;
+    max-width:90vw;
+    display:block;
+    padding:10px;
+    margin:auto;
+    border-radius:10px;
+    background:#ffffff;
+    text-align:center;
+`
+
 function PokemonDetail() {
     // Constant
+    const pocketCapacity = 10;
     const params = useParams();
     const [searchParams] = useSearchParams();
     const pokemonImageBase64 = searchParams.get('image');
@@ -27,7 +40,8 @@ function PokemonDetail() {
     const [getMyPokemons, setMyPokemons] = localStorage("mypokemon");
 
     // State
-    const [isOpen, setIsOpen] = useState(false);
+    const [isModalOpen, setModalIsOpen] = useState(false);
+    const [isModalWarningOpen, setIsModalWarningOpen] = useState(false);
     const [loadingCatch, setLoadingCatch] = useState(false);
     const [totalOwnedPokemon, setTotalOwnedPokemon] = useState(0);
     const [nickname, setNickname] = useState("");
@@ -41,11 +55,15 @@ function PokemonDetail() {
     })
 
     const handleCatchPokemon = () => {
-        setLoadingCatch(true);
-        setTimeout(() => {
-            setIsOpen(true);
-            handleOwnedSamePokemon()
-        }, 2000)
+        if (getMyPokemons().length !== pocketCapacity) {
+            setLoadingCatch(true);
+            setTimeout(() => {
+                setModalIsOpen(true);
+                handleOwnedSamePokemon()
+            }, 2000)
+        } else {
+            setIsModalWarningOpen(true)
+        }
     }
 
     const handleOwnedSamePokemon = () => {
@@ -74,13 +92,13 @@ function PokemonDetail() {
                 ]))
             setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
             setLoadingCatch(false)
-            setIsOpen(false);
+            setModalIsOpen(false);
         }
     }
 
     const handleRelease = () => {
         setLoadingCatch(false)
-        setIsOpen(false);
+        setModalIsOpen(false);
     }
 
     const handleInputChange = (event) => {
@@ -106,45 +124,25 @@ function PokemonDetail() {
         // }
     }, [])
 
-
-    return (
-        <div
-            className={
-                css`
-            margin: 20px 0;
-            `
-            }
+    const ModalCatchPokemon = () => (
+        <Modal
+            isOpen={isModalOpen}
         >
-            <Modal
-                isOpen={isOpen}
-            >
+            <div className={modalContainer}>
+                <h3>
+                    CONGRATULATION
+                </h3>
+                <p
+                    className={
+                        css`margin-top:0px`
+                    }
+                >You got {data?.pokemon?.name}</p>
                 <div className={
-                    css`
-                    width:80vw;
-                    max-height:50vh;
-                    max-width:90vw;
-                    display:block;
-                    padding:10px;
-                    margin:auto;
-                    border-radius:10px;
-                    background:#ffffff;
-                    text-align:center;
-                    `
+                    css`margin-bottom:10px`
                 }>
-                    <h3>
-                        CONGRATULATION
-                    </h3>
-                    <p
+                    <input
                         className={
-                            css`margin-top:0px`
-                        }
-                    >You got {data?.pokemon?.name}</p>
-                    <div className={
-                        css`margin-bottom:10px`
-                    }>
-                        <input
-                            className={
-                                css`
+                            css`
                                     border-radius:10px;
                                     border: 2px solid rgba(0, 0, 0, 0.6);
                                     background-image:none;
@@ -157,40 +155,75 @@ function PokemonDetail() {
                                         outline: none;
                                     }
                                 `
-                            }
-                            type="text"
-                            onChange={handleInputChange}
-                            id="nickname-input"
-                            placeholder="Give A Nickname"
-                        />
-                        {
-                            isMultipleCatch && (
-                                <div>
-                                    <p className={css`font-size:14px;color:red`}>
-                                        You already have bulbasour.
-                                        <br /> Please give it a name.
-                                    </p>
-                                </div>
-                            )
                         }
-                    </div>
-                    <div className={css`margin-bottom:10px`}>
-                        <Button onClick={handleAddToPocket}>
-                            Add to my pocket
-                        </Button>
-                        <Button
-                            style={css`
+                        type="text"
+                        onChange={handleInputChange}
+                        id="nickname-input"
+                        placeholder="Give A Nickname"
+                    />
+                    {
+                        isMultipleCatch && (
+                            <div>
+                                <p className={css`font-size:14px;color:red`}>
+                                    You already have bulbasour.
+                                    <br /> Please give it a name.
+                                </p>
+                            </div>
+                        )
+                    }
+                </div>
+                <div className={css`margin-bottom:10px`}>
+                    <Button onClick={handleAddToPocket}>
+                        Add to my pocket
+                    </Button>
+                    <Button
+                        style={css`
                             margin-left:10px
                             `}
-                            onClick={handleRelease}
-                        >
-                            Release
-                        </Button>
-                    </div>
+                        onClick={handleRelease}
+                    >
+                        Release
+                    </Button>
                 </div>
-            </Modal>
+            </div>
+        </Modal>
+    )
+
+    const ModalWarning = () => (
+        <Modal
+            isOpen={isModalWarningOpen}
+            onClick={() => setIsModalWarningOpen(false)}
+        >
+            <div className={modalContainer}>
+                <h1>SORRY</h1>
+                Your pocket is full, please release some pokemon
+                <p
+                    className={
+                        css`
+                    font-weight:bold;
+                    color:red;
+                    `
+                    }
+                >owned pokemon : 10/10</p>
+            </div>
+        </Modal>
+    )
+
+
+
+    return (
+        <div
+            className={
+                css`
+            margin: 20px 0;
+            `
+            }
+        >
+            <ModalCatchPokemon />
+            <ModalWarning />
+
             {
-                loading ? "Loading..." :
+                loading ? <WaitingText /> :
                     (
                         <>
                             <div

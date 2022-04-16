@@ -1,7 +1,8 @@
 import React from "react";
 import { css } from '@emotion/css'
 
-function Modal({ children, isOpen = true }) {
+function Modal({ children, isOpen = true, onClick }) {
+
     return (
         <>
             {
@@ -19,6 +20,7 @@ function Modal({ children, isOpen = true }) {
                     display: flex;
                     flex-direction: column;
                 `}
+                        onClick={onClick}
                     >
                         {children}
                     </div>

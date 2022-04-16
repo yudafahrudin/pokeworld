@@ -1,4 +1,4 @@
-const useLocalStorage = (key) => {
+const localStorage = (key) => {
     const globalKey = key;
 
     const getValue = () => {
@@ -13,4 +13,4 @@ const useLocalStorage = (key) => {
     return [getValue, setValue]
 }
 
-export default useLocalStorage;
+export default localStorage;
