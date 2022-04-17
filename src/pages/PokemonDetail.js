@@ -360,7 +360,7 @@ function PokemonDetail() {
                             :
                             <img
                                 className={imageStyle}
-                                src={pokemonImageUrl}
+                                src={pokemonDreamworldUrl}
                                 alt={`pokemon-detail`}
                             />
                     }
