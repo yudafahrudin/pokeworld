@@ -1,8 +1,13 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 
-function FormInput({ name, style = css``, placeholder = "Please input text", onChange, value }) {
-
+function FormInput({
+    name,
+    style = css``,
+    placeholder = "Please input text",
+    onChange,
+    value
+}) {
     const defaultCss = css`
         border-radius:10px;
         border: 2px solid rgba(0, 0, 0, 0.6);
@@ -17,17 +22,14 @@ function FormInput({ name, style = css``, placeholder = "Please input text", onC
         }`
 
     return (
-        <div>
-            <input
-                type="text"
-                name={name}
-                onChange={onChange}
-                placeholder={placeholder}
-                className={cx(defaultCss, style)}
-                value={value}
-                autoFocus
-            />
-        </div>
+        <input
+            type="text"
+            name={name}
+            onChange={onChange}
+            placeholder={placeholder}
+            className={cx(defaultCss, style)}
+            value={value}
+        />
 
     )
 }

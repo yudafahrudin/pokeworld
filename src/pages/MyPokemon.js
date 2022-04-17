@@ -42,8 +42,10 @@ function Mypokemon() {
     }
 
     const handleReleasePokemon = () => {
-        if (Boolean(idPokemon)) {
-            const notReleasedPokemon = getMyPokemons().filter(pokemon => pokemon.id !== idPokemon);
+        if (idPokemon) {
+            const notReleasedPokemon = getMyPokemons().filter(
+                pokemon => (pokemon.nickname || pokemon.name) !== idPokemon
+            );
             setMyPokemons(notReleasedPokemon);
             setIsModalOpen(false)
             setIdPokemon(0);
@@ -96,7 +98,7 @@ function Mypokemon() {
             <ul>
                 {
                     getMyPokemons().length ? (
-                        getMyPokemons().map((pokemon, index) => {
+                        getMyPokemons().reverse().map((pokemon, index) => {
                             return (
                                 <div key={index}>
                                     <PokemonCardList
@@ -110,10 +112,10 @@ function Mypokemon() {
                                         `}
                                     >
                                         <Button
-                                            onClick={() => handleOpenModal(pokemon.id)}
+                                            onClick={() => handleOpenModal(pokemon.nickname || pokemon.name)}
                                             bgColor="warning"
                                         >
-                                            Release {pokemon.name}
+                                            Release {pokemon.nickname || pokemon.name}
                                         </Button>
                                         <Button
                                             bgColor="default"
@@ -126,7 +128,14 @@ function Mypokemon() {
                             )
                         }
                         )
-                    ) : <p>You don't have pokemon, go to catch <a href="/">pokemon</a></p>
+                    ) : <p className={css`
+                        text-align:center;
+                        font-size:14px;
+                        color:#dadad3;
+                    `}>
+                        You don't have pokemon. <br />go to catch
+                        <a className={css`text-decoration:none;color:#03a9f4;`} href="/"> pokemon</a>
+                    </p>
                 }
             </ul>
             <ModalConfirm />

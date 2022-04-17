@@ -5,9 +5,9 @@ import WaitingText from './WaitingText'
 import PokemonCardList from './PokemonCardList'
 
 export {
+    Modal,
     Button,
     FormInput,
-    Modal,
     WaitingText,
     PokemonCardList
 };

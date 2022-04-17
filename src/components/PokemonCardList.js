@@ -6,7 +6,6 @@ import { countMyPokemon } from '../helpers'
 
 function PokemonCardList({ pokemon, showOwnedPokemon = true, bgColor }) {
     const navigate = useNavigate();
-
     const enumColor = () => {
         switch (bgColor) {
             case "primary":
@@ -56,7 +55,7 @@ function PokemonCardList({ pokemon, showOwnedPokemon = true, bgColor }) {
                     src={pokemon.image}
                     width={"100%"}
                     height={"auto"}
-                    alt={pokemon.name}
+                    alt={pokemon.nickname || pokemon.name}
                 />
             </div>
             <div
@@ -72,7 +71,7 @@ function PokemonCardList({ pokemon, showOwnedPokemon = true, bgColor }) {
                         text-transform: capitalize;
                         `
                 }>
-                    {pokemon.name}
+                    {pokemon.nickname || pokemon.name}
                 </h3>
                 {
                     showOwnedPokemon && (<p className={css`

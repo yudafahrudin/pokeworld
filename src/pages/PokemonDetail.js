@@ -14,6 +14,43 @@ import {
 // Helper
 import { localStorage, countMyPokemon } from '../helpers'
 
+const container = css`
+    margin: 20px 0;`
+
+const headerInfoContainer = css`
+    position:relative;
+`
+const headerInfoText = css`
+    position:relative;`
+
+const headerInfoButton = css`
+    right:0;
+    width:60px;
+    position:absolute;
+    height:35px !important;`
+
+const imageContainer = css`
+    text-align:center`
+
+const imageStyle = css`
+    width:250px;
+    height:auto;
+    margin-top:20px`
+
+const pokemonTitle = css`
+    margin-top:30px;    
+    margin-bottom:10px;    
+    text-transform: capitalize;`
+
+const pokemonTypeLabel = css`
+    color: #9E9E9E;
+    font-size:14px;
+    display: inline-block;
+    border: 1px solid;
+    border-radius:10px;
+    margin:5px 5px;
+    padding:5px;`
+
 const modalContainer = css`
     width:80vw;
     max-height:50vh;
@@ -23,8 +60,7 @@ const modalContainer = css`
     margin:auto;
     border-radius:10px;
     background:#ffffff;
-    text-align:center;
-`
+    text-align:center;`
 
 function PokemonDetail() {
     // Constant
@@ -70,9 +106,9 @@ function PokemonDetail() {
         let isExistingPokemon = false;
 
         if (getMyPokemons().length) {
-            isExistingPokemon = getMyPokemons().every(pokemon =>
-                pokemon.name === data?.pokemon?.name
-            );
+            isExistingPokemon = getMyPokemons().some(pokemon =>
+                pokemon.id === data?.pokemon?.id
+            )
         }
 
         if (isExistingPokemon) {
@@ -100,14 +136,18 @@ function PokemonDetail() {
     const handleRelease = () => {
         setLoadingCatch(false)
         setModalIsOpen(false);
+        setNickname("")
     }
 
     const handleInputChange = (event) => {
-        if (event.target.value) {
-            setIsMultipleCatch(false);
-        } else {
-            setIsMultipleCatch(true);
+        if (isMultipleCatch) {
+            if (event.target.value) {
+                setIsMultipleCatch(false);
+            } else {
+                setIsMultipleCatch(true);
+            }
         }
+
         setNickname(event.target.value ?? "")
     }
 
@@ -115,21 +155,22 @@ function PokemonDetail() {
         setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
     }, [data])
 
-    useEffect(() => {
-        // const loopEffectCatch = setInterval(() => {
-        //     console.log('hai')
-        //     setOnCatchPokemon(!onCatchPokemon)
-        // }, 2000)
-        // if (!catchPokemon) {
-        //     clearInterval(loopEffectCatch);
-        // }
-    }, [])
+    // useEffect(() => {
+    // const loopEffectCatch = setInterval(() => {
+    //     console.log('hai')
+    //     setOnCatchPokemon(!onCatchPokemon)
+    // }, 2000)
+    // if (!catchPokemon) {
+    //     clearInterval(loopEffectCatch);
+    // }
+    // }, [])
 
     const ModalCatchPokemon = () => (
         <Modal
+            key={"Dasdassa-1"}
             isOpen={isModalOpen}
         >
-            <div className={modalContainer}>
+            <div key={"Dasdassass-1"} className={modalContainer}>
                 <h3>
                     CONGRATULATION
                 </h3>
@@ -142,33 +183,10 @@ function PokemonDetail() {
                     css`margin-bottom:10px`
                 }>
                     <FormInput
-                        key={"Sdasdsadsasa"}
+                        placeholder="Give A Nickname"
                         value={nickname}
                         onChange={handleInputChange}
-                        placeholder="Give A Nickname"
                     />
-
-                    {/* <input
-                        className={
-                            css`
-                                    border-radius:10px;
-                                    border: 2px solid rgba(0, 0, 0, 0.6);
-                                    background-image:none;
-                                    background-color: #dadad3;
-                                    -webkit-box-shadow: none;
-                                    -moz-box-shadow: none;
-                                    box-shadow: none;
-                                    padding: 10px;
-                                    &:focus {
-                                        outline: none;
-                                    }
-                                `
-                        }
-                        type="text"
-                        onChange={handleInputChange}
-                        id="nickname-input"
-                        placeholder="Give A Nickname"
-                    /> */}
                     {
                         isMultipleCatch && (
                             <div>
@@ -219,115 +237,54 @@ function PokemonDetail() {
         </Modal>
     )
 
-
-
     return (
         <div
-            className={
-                css`
-            margin: 20px 0;
-            `
-            }
+            className={container}
         >
-            <ModalCatchPokemon />
-            <ModalWarning />
+            {ModalCatchPokemon()}
+            {ModalWarning()}
 
             {
                 loading ? <WaitingText /> :
                     (
                         <>
-                            <div
-                                className={
-                                    css`
-                                position:relative;
-                                `
-                                }
-                            >
-                                <span className={
-                                    css`
-                                    font-size:14px;
-                                    `
-                                }>owned : {totalOwnedPokemon}</span>
+                            <div className={headerInfoContainer}>
+                                <span className={headerInfoText}>
+                                    owned : {totalOwnedPokemon}
+                                </span>
                                 <Button
+                                    bgColor="primary"
                                     onClick={handleCatchPokemon}
                                     disabled={loadingCatch}
-                                    bgColor="primary"
-                                    style={
-                                        css`
-                                        right:0;
-                                        width:60px;
-                                        position:absolute;
-                                        height:35px !important;
-                                        `
-                                    }>
+                                    style={headerInfoButton}
+                                >
                                     Catch
                                 </Button>
                             </div>
-                            <div className={
-                                css`
-                            text-align:center;
-                            `
-                            }>
 
-                                <div className={
-                                    css`
-                                    height:255px;
-                                    margin-top:20px;
-                                    `
-                                }>
-
-                                    {
-                                        loadingCatch ?
-                                            <img
-                                                className={
-                                                    css`
-                                                width:auto;
-                                                height:250px;
-                                            `
-                                                }
-                                                src={"https://www.pngmart.com/files/2/Pokeball-PNG-Photos.png"} />
-                                            :
-                                            <img
-                                                className={
-                                                    css`
-                                            width:auto;
-                                            height:250px;
-                            `
-                                                }
-                                                src={pokemonDreamworldUrl} />
-                                    }
-
-
-                                </div>
-
-                                <h1
-                                    className={
-                                        css`
-                                    margin-top:30px;    
-                                    margin-bottom:10px;    
-                                    text-transform: capitalize;`
-                                    }
-                                >{data?.pokemon?.name}
+                            <div className={imageContainer}>
+                                {
+                                    loadingCatch ?
+                                        <img
+                                            className={imageStyle}
+                                            src={require('../assets/pokeball-catching.gif')
+                                            }
+                                        />
+                                        :
+                                        <img
+                                            className={imageStyle}
+                                            src={pokemonDreamworldUrl}
+                                        />
+                                }
+                                <h1 className={pokemonTitle}>
+                                    {data?.pokemon?.name}
                                 </h1>
                                 {
                                     data?.pokemon?.types?.map(({ type }, index) => (
-                                        <p key={index}
-                                            className={
-                                                css`
-                                        color: #9E9E9E;
-                                        font-size:14px;
-                                        display: inline-block;
-                                        border: 1px solid;
-                                        border-radius:10px;
-                                        margin:5px 5px;
-                                        padding:5px;
-                                        `
-                                            }
-                                        >
+                                        <p key={index} className={pokemonTypeLabel}>
                                             {type?.name}
                                         </p>
                                     ))
-
                                 }
                             </div>
                             <ul className={
