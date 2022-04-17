@@ -104,11 +104,11 @@ const movesContainer = css`
     background:#F2F2F2;`
 
 const modalContainer = css`
-    width:80vw;
     max-height:50vh;
-    max-width:90vw;
+    max-width:80vw;
+    padding: 0 1rem 2rem 1rem;
     display:block;
-    padding:10px;
+    cursor:pointer;
     margin:auto;
     border-radius:10px;
     background:#ffffff;
@@ -129,8 +129,8 @@ function PokemonDetail() {
     const [getProbPokemon] = localStorage("catchProbabilities");
 
     // State
-    const [isModalOpen, setModalIsOpen] = useState(false);
-    const [isModalWarningOpen, setIsModalWarningOpen] = useState(false);
+    const [isModalCatchPokemon, setIsModalCatchPokemon] = useState(false);
+    const [isModalPocketFull, setIsModalPocketFull] = useState(false);
     const [isModalPokemonRun, setIsModalPokemonRun] = useState(false);
     const [loadingCatch, setLoadingCatch] = useState(false);
     const [totalOwnedPokemon, setTotalOwnedPokemon] = useState(0);
@@ -167,29 +167,35 @@ function PokemonDetail() {
     }
 
     const handleCatchPokemon = () => {
+        const { probabilites } = getProbPokemon()
+
         setLoadingCatch(true);
 
-        if (probabilityReached === getProbPokemon().probabilites.length) {
-            generateProbabilities(data?.pokemon?.name)
-            setProbabilityReached(0)
-        }
+        const probailityPokemonCatched = probabilites[probabilityReached]
 
-        const probailityPokemonCatched = getProbPokemon().probabilites[probabilityReached]
-
-        if (probailityPokemonCatched) {
-            // if pocket not fully
-            if (getMyPokemons().length !== pocketCapacity) {
+        // if pocket not fully
+        if (getMyPokemons().length !== pocketCapacity) {
+            if (probailityPokemonCatched) {
                 setTimeout(() => {
-                    setModalIsOpen(true);
+                    setIsModalCatchPokemon(true);
                     handleOwnedSamePokemon()
                 }, 2000)
             } else {
-                setIsModalWarningOpen(true)
+                setIsModalPokemonRun(true)
             }
         } else {
-            setIsModalPokemonRun(true)
+            setIsModalPocketFull(true)
         }
+
+        // set next probability
         setProbabilityReached(probabilityReached + 1)
+
+        // if the probability at the end of array
+        // let's regenerate the probability for the next catch
+        if (probabilityReached === probabilites.length) {
+            generateProbabilities(data?.pokemon?.name)
+            setProbabilityReached(0)
+        }
     }
 
     const handleAddToPocketValidation = () => {
@@ -211,17 +217,28 @@ function PokemonDetail() {
                 dreamworld: pokemonDreamworldUrl
             }
             ])
-        setIsMultipleCatch(false);
+        setNickname("")
         setLoadingCatch(false)
-        setModalIsOpen(false);
+        setIsMultipleCatch(false);
+        setIsModalCatchPokemon(false);
         setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
     }
 
     const handleRelease = () => {
         setNickname("")
         setLoadingCatch(false)
-        setModalIsOpen(false);
         setIsMultipleCatch(false)
+        setIsModalCatchPokemon(false);
+    }
+
+    const handleClosePocketFull = () => {
+        setLoadingCatch(false)
+        setIsModalPocketFull(false)
+    }
+
+    const handleClosePokemonRun = () => {
+        setLoadingCatch(false)
+        setIsModalPokemonRun(false)
     }
 
     const handleInputChange = (event) => {
@@ -230,7 +247,7 @@ function PokemonDetail() {
 
     const ModalCatchPokemon = () => (
         <Modal
-            isOpen={isModalOpen}
+            isOpen={isModalCatchPokemon}
         >
             <div className={modalContainer}>
                 <h3>
@@ -277,10 +294,10 @@ function PokemonDetail() {
         </Modal>
     )
 
-    const ModalWarning = () => (
+    const ModalPocketFull = () => (
         <Modal
-            isOpen={isModalWarningOpen}
-            onClick={() => setIsModalWarningOpen(false)}
+            isOpen={isModalPocketFull}
+            onClick={handleClosePocketFull}
         >
             <div className={modalContainer}>
                 <h1>SORRY</h1>
@@ -295,14 +312,11 @@ function PokemonDetail() {
     const ModalPokemonRun = () => (
         <Modal
             isOpen={isModalPokemonRun}
-            onClick={() => setIsModalPokemonRun(false)}
+            onClick={handleClosePokemonRun}
         >
             <div className={modalContainer}>
                 <h1>SORRY</h1>
-                This Pokemon really strong :(
-                <p
-                    className={css`font-weight:bold;color:red;`}
-                >owned pokemon : 10/10</p>
+                <b>{data?.pokemon?.name}</b> is running, this Pokemon really strong :(
             </div>
         </Modal>
     )
@@ -315,7 +329,7 @@ function PokemonDetail() {
         return (
             <div className={container}>
                 {ModalCatchPokemon()}
-                {ModalWarning()}
+                {ModalPocketFull()}
                 {ModalPokemonRun()}
                 <div className={headerInfoContainer}>
                     <span className={headerInfoText}>

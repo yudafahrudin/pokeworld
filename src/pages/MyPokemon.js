@@ -16,6 +16,7 @@ const container = css`
 const containerCapacity = css`
     display:flex; 
     justify-content: space-between;
+    margin: 0 10px 0 10px;
     height:40px`
 
 const textCapacity = css`
@@ -32,11 +33,10 @@ const textInfo = css`
         }`
 
 const modalContainer = css`
-    width:80vw;
     max-height:50vh;
-    max-width:90vw;
+    max-width:80vw;
+    padding: 0 1rem 2rem 1rem;
     display:block;
-    padding:10px;
     margin:auto;
     border-radius:10px;
     background:#ffffff;
@@ -94,12 +94,15 @@ function Mypokemon() {
                 <h3>
                     CONFIRMATION
                 </h3>
+                <p>
+                    Are you sure you want to release this pokemon?
+                </p>
                 <div className={css`margin-bottom:10px`}>
                     <Button
                         bgColor={isReleaseAll ? "danger" : "warning"}
                         onClick={() => handleReleasePokemon()}
                     >
-                        Release {isReleaseAll && "all"} Pokemon
+                        Release Pokemon
                     </Button>
                     <Button
                         bgColor="default"
@@ -136,15 +139,12 @@ function Mypokemon() {
                     Release All
                 </Button>
             </div>
-            <ul>
-                <div
-                    className={css`width:100%;background:red;`}
-                >
-                    {
-                        getMyPokemons().length ? (
-                            getMyPokemons().reverse().map((pokemon, index) => {
-                                return (
-                                    <div key={index} className={css`
+            <ul className={css`display: inline-block;`}>
+                {
+                    getMyPokemons().length ? (
+                        getMyPokemons().reverse().map((pokemon, index) => {
+                            return (
+                                <div key={index} className={css`
                                 @media (min-width: ${md}) {
                                     width:50%;
                                 }
@@ -153,40 +153,36 @@ function Mypokemon() {
                                 }
                                 float:left;
                                 `}>
-                                        <PokemonCardList
-                                            pokemon={pokemon}
-                                            bgColor="default"
-                                            float={false}
-                                            showOwnedPokemon={false}
-                                            style={css`border-radius:0px;box-shadow:none`}
-                                        />
-                                        <div
-                                            className={css`
-                                            background:${colors.grayLight};
+                                    <PokemonCardList
+                                        pokemon={pokemon}
+                                        float={false}
+                                        showOwnedPokemon={false}
+                                        style={css`margin:10px`}
+                                    />
+                                    <div
+                                        className={css`
                                             margin-top:-10px;
                                             margin-bottom:30px;
                                             padding:10px;
-                                            padding-top:0px;
                                         `}
+                                    >
+                                        <Button
+                                            onClick={() => handleOpenModal(pokemon.nickname || pokemon.name)}
+                                            bgColor="warning"
                                         >
-                                            <Button
-                                                onClick={() => handleOpenModal(pokemon.nickname || pokemon.name)}
-                                                bgColor="warning"
-                                            >
-                                                Release {pokemon.nickname || pokemon.name}
-                                            </Button>
-                                        </div>
+                                            Release {pokemon.nickname || pokemon.name}
+                                        </Button>
                                     </div>
-                                )
-                            }
+                                </div>
                             )
-                        ) : <p className={textInfo}>
-                            You don't have pokemon.
-                            <br />go to catch
-                            <a href="/"> pokemon</a>
-                        </p>
-                    }
-                </div>
+                        }
+                        )
+                    ) : <p className={textInfo}>
+                        You don't have pokemon.
+                        <br />go to catch
+                        <a href="/"> pokemon</a>
+                    </p>
+                }
             </ul>
             <ModalConfirm />
         </div >

@@ -5,7 +5,7 @@ import { css, cx } from '@emotion/css'
 import { countMyPokemon } from '../helpers'
 import { md } from '../styles/breakpoints'
 
-function PokemonCardList({ pokemon, style = css``, showOwnedPokemon = true, bgColor, float = true }) {
+function PokemonCardList({ children, pokemon, style = css``, showOwnedPokemon = true, bgColor, float = true }) {
     const navigate = useNavigate();
     const enumColor = () => {
         switch (bgColor) {
@@ -98,6 +98,7 @@ function PokemonCardList({ pokemon, style = css``, showOwnedPokemon = true, bgCo
                 }
 
             </div>
+            {children}
         </li>
     )
 }
