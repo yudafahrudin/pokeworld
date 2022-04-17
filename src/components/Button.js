@@ -1,6 +1,8 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 
+import colors from '../styles/colors';
+
 function Button({ children, fullWidth, disabled, style = css``, bgColor, onClick }) {
 
   const defaultCss = css`
@@ -10,15 +12,13 @@ function Button({ children, fullWidth, disabled, style = css``, bgColor, onClick
     padding:10px;
     border: none;
     border-radius: 5px;
-    background:#339DE8;
-    color: #ffffff;
     font-weight:bold;
     font-size:.85rem;
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     :disabled {
-    background-color: #cccccc;
-    color: #666666;
+    background-color: ${colors.grayDisable};
+    color: ${colors.grayDisableText};
     }
       :active {
         transform: translateY(2px);
@@ -28,13 +28,13 @@ function Button({ children, fullWidth, disabled, style = css``, bgColor, onClick
   const enumColor = () => {
     switch (bgColor) {
       case "primary":
-        return { bgColor: "#339DE8", fontColor: "white" };
+        return { bgColor: colors.primary, fontColor: colors.white };
       case "default":
-        return { bgColor: "#F5F5F5", fontColor: "black" };
+        return { bgColor: colors.white2, fontColor: colors.black };
       case "warning":
-        return { bgColor: "#E3C446", fontColor: "black" };
+        return { bgColor: colors.warning, fontColor: colors.black };
       default:
-        return { bgColor: "#ffffff", fontColor: "black" };
+        return { bgColor: colors.white, fontColor: colors.black };
     }
   }
 

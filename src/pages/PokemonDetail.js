@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { css } from '@emotion/css'
+import { css, cx } from '@emotion/css'
 
 // Component
 import { Button, Modal, WaitingText, FormInput } from '../components'
@@ -14,6 +14,7 @@ import {
 // Helper
 import { localStorage, countMyPokemon } from '../helpers'
 
+// Style
 const container = css`
     margin: 20px 0;`
 
@@ -50,6 +51,49 @@ const pokemonTypeLabel = css`
     border-radius:10px;
     margin:5px 5px;
     padding:5px;`
+
+const basicInfoContainer = css`
+    margin-bottom:0px;
+    list-style:none;
+    padding:10px;
+    border-radius:10px;
+    background:#F2F2F2;`
+
+const basicInfoLabel = css`
+    font-size:12px;
+    font-weight:bold;
+    line-height:26px;
+    margin:0px;
+    margin-right:10px;`
+
+const basicInfoText = css`
+    margin-left:10px;
+    line-height: 26px;
+    margin:0px;
+    margin-right:10px;`
+
+const infoStatContainer = css`
+    list-style:none;
+    margin-top:0px;
+    padding:10px 10px 10px 0;
+    border-radius:10px;`
+
+const infoStatLabel = css`
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:10px;`
+
+const infoStatPower = css`
+    display:block;
+    background:#559EDF;
+    padding:2px 2px 2px 10px;
+    color:#ffffff;
+    font-weight:bold;`
+
+const infoStatPowerContainer = css`
+    width:100%;
+    border-radius:5px;
+    background:#E6E6E6;`
 
 const modalContainer = css`
     width:80vw;
@@ -155,22 +199,11 @@ function PokemonDetail() {
         setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
     }, [data])
 
-    // useEffect(() => {
-    // const loopEffectCatch = setInterval(() => {
-    //     console.log('hai')
-    //     setOnCatchPokemon(!onCatchPokemon)
-    // }, 2000)
-    // if (!catchPokemon) {
-    //     clearInterval(loopEffectCatch);
-    // }
-    // }, [])
-
     const ModalCatchPokemon = () => (
         <Modal
-            key={"Dasdassa-1"}
             isOpen={isModalOpen}
         >
-            <div key={"Dasdassass-1"} className={modalContainer}>
+            <div className={modalContainer}>
                 <h3>
                     CONGRATULATION
                 </h3>
@@ -191,7 +224,7 @@ function PokemonDetail() {
                         isMultipleCatch && (
                             <div>
                                 <p className={css`font-size:14px;color:red`}>
-                                    You already have bulbasour.
+                                    You already have  {data?.pokemon?.name}.
                                     <br /> Please give it a name.
                                 </p>
                             </div>
@@ -204,9 +237,7 @@ function PokemonDetail() {
                     </Button>
                     <Button
                         bgColor="warning"
-                        style={css`
-                            margin-left:10px
-                            `}
+                        style={css` margin-left:10px`}
 
                         onClick={handleRelease}
                     >
@@ -226,21 +257,15 @@ function PokemonDetail() {
                 <h1>SORRY</h1>
                 Your pocket is full, please release some pokemon
                 <p
-                    className={
-                        css`
-                    font-weight:bold;
-                    color:red;
-                    `
-                    }
+                    className={css`font-weight:bold;color:red;`}
                 >owned pokemon : 10/10</p>
             </div>
         </Modal>
     )
 
     return (
-        <div
-            className={container}
-        >
+        <div className={container}>
+
             {ModalCatchPokemon()}
             {ModalWarning()}
 
@@ -287,127 +312,58 @@ function PokemonDetail() {
                                     ))
                                 }
                             </div>
-                            <ul className={
-                                css`
-                                margin-bottom:0px;
-                                list-style:none;
-                                padding:10px;
-                                border-radius:10px;
-                                background:#F2F2F2;
-                                `
-                            }>
-                                <h2 className={
-                                    css`margin-top:10px`
-                                }>
+
+                            {/* BASIC INFO */}
+                            <ul className={basicInfoContainer}>
+                                <h2 className={css`margin-top:10px`}>
                                     Basic Info :
                                 </h2>
-                                <li className={
-                                    css`display:flex;`
-                                }>
-                                    <p
-                                        className={
-                                            css`
-                                            font-size:12px;
-                                            font-weight:bold;
-                                            line-height:26px;
-                                            margin:0px;
-                                            margin-right:10px;
-                                        `
-                                        }
-                                    >HEIGHT :</p>
-                                    <p
-                                        className={
-                                            css`
-                                            margin-left:10px;
-                                            line-height: 26px;
-                                            margin:0px;
-                                            margin-right:10px;`
-                                        }
-                                    >
+                                <li className={css`display:flex;`}>
+                                    <p className={basicInfoLabel}>
+                                        HEIGHT :
+                                    </p>
+                                    <p className={basicInfoText}>
                                         {data?.pokemon?.height / 10}m
                                     </p>
                                 </li>
-                                <li className={
-                                    css`display:flex;`
-                                }>
-                                    <p
-                                        className={
-                                            css`
-                                            font-size:12px;
-                                            font-weight:bold;
-                                            line-height:26px;
-                                            margin:0px;
-                                            margin-right:10px;
-                                            `
-                                        }
-                                    >WEIGHT :</p>
-                                    <p
-                                        className={
-                                            css`
-                                            margin-left:10px;
-                                            line-height: 26px;
-                                            margin:0px;
-                                            margin-right:10px;`
-                                        }
-                                    >
+                                <li className={css`display:flex;`}>
+                                    <p className={basicInfoLabel}>
+                                        HEIGHT :
+                                    </p>
+                                    <p className={basicInfoText}>
                                         {data?.pokemon?.weight / 10}kg
                                     </p>
                                 </li>
                             </ul>
+
+                            {/* STATS INFORMATION */}
                             <ul
-                                className={
-                                    css`
-                                    list-style:none;
-                                    margin-top:0px;
-                                    padding:10px 10px 10px 0;
-                                    border-radius:10px;
-                                    `
-                                }
+                                className={infoStatContainer}
                             >
                                 <h2>
                                     Stats :
                                 </h2>
                                 {data?.pokemon?.stats.map((stat, index) => (
                                     <li key={index}
-                                        className={
-                                            css`
-                                                margin-bottom:10px;
-                                                `
-                                        }
+                                        className={css`margin-bottom:10px;`}
                                     >
-                                        <div>
+                                        <>
                                             <div
-                                                className={
-                                                    css`
-                                                font-size:12px;
-                                                font-weight:bold;
-                                                margin-bottom:10px;
-                                                `
-                                                }
+                                                className={infoStatLabel}
                                             >
                                                 {stat.stat.name.toUpperCase()} :
                                             </div>
-                                            <div className={
-                                                css`
-                                                width:100%;
-                                                border-radius:5px;
-                                                background:#E6E6E6;
-                                                `
-                                            }>
+                                            <div className={infoStatPowerContainer}>
                                                 <div className={
-                                                    css`
-                                                    display:block;
-                                                    background:#559EDF;
-                                                    width: ${stat.base_stat * 2}px;
-                                                    padding:2px 2px 2px 10px;
-                                                    color:#ffffff;
-                                                    font-weight:bold;
-                                                    `
+                                                    cx(
+                                                        infoStatPower,
+                                                        css`width: ${stat.base_stat * 2}px;`
+                                                    )
                                                 }>
                                                     {stat.base_stat}
                                                 </div>
                                             </div>
-                                        </div>
+                                        </>
                                     </li>
                                 ))}
                             </ul>

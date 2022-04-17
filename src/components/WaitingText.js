@@ -1,7 +1,8 @@
 import React from "react";
 import { css, cx } from '@emotion/css'
 
-const defaultStyle = css`font-size:14px;padding:5px;color:#dadad3`
+import colors from '../styles/colors'
+const defaultStyle = css`font-size:14px;padding:5px;color:${colors.gray}`
 
 function WaitingText({ style }) {
     return (

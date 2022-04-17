@@ -2,76 +2,58 @@ import React from "react";
 import { css } from '@emotion/css'
 
 import { md } from '../styles/breakpoints'
+import colors from '../styles/colors'
+
+const container = css`
+    width:100%;
+    max-height:15vh;`
+
+const wrapper = css`
+    width:60vw;
+    margin-left:auto;
+    margin-right:auto;
+    @media (max-width: ${md}) {
+        width: 80vw;
+    }`
+
+const nav = css`
+    display:flex;
+    padding:10px 0 10px 0;`
+
+const logo = css`
+    text-decoration: none;
+    color: ${colors.title};`
+
+const menu = css`
+    display:inline-flex;
+    list-style: none;
+    margin-left:auto;`
+
+const menuItem = css`
+    text-align: center;
+    margin: 0 2px;
+    overflow: hidden;
+    a {
+        line-height:25px;
+        display: block;
+        text-decoration: none;
+        font-weight: bold;
+        height: 100%;
+        color:${colors.primary};
+    }`
 
 function Header() {
     return (
-        <div className={
-            css`
-            width:100%;
-            max-height:15vh;
-            background-color: #ffffff;
-            `
-        }
-        >
-            <div className={
-                css`
-                width:60vw;
-                margin-left:auto;
-                margin-right:auto;
-                @media (max-width: ${md}) {
-                    width: 80vw;
-                }
-                `
-            }>
-
+        <div className={container}>
+            <div className={wrapper}>
                 <nav role="navigation"
-                    className={
-                        css`
-                    display:flex;
-                    padding:10px 0 10px 0;
-                    `
-                    }>
-                    <a href="/" className={
-                        css`
-                        text-decoration: none;
-                        color:#E34646;
-                        `
-                    }>
+                    className={nav}>
+                    <a href="/" className={logo}>
                         <h1>Pokéworld</h1>
                     </a>
-                    <ul className={
-                        css`
-                    display:inline-flex;
-                    list-style: none;
-                    margin-left:auto;
-                    `
-                    }>
-                        <li
-                            className={css`
-                            text-align: center;
-                            margin: 0 2px;
-                            overflow: hidden;
-                        `}
-                        >
-                            <a href="/my-pokemon"
-                                className={
-                                    css`
-                                display: block;
-                                text-decoration: none;
-                                font-weight: bold;
-                                display: -webkit-box;
-                                display: -ms-flexbox;
-                                display: flex;
-                                -webkit-box-align: center;
-                                -ms-flex-align: center;
-                                align-items: center;
-                                -webkit-box-pack: center;
-                                -ms-flex-pack: center;
-                                justify-content: center;
-                                height: 100%;
-                                color:#03a9f4;
-                                `
-                                }>
+                    <ul className={menu}>
+                        <li className={menuItem}>
+                            <a href="/my-pokemon">
                                 My Pokemon
                             </a>
                         </li>
