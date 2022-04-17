@@ -139,7 +139,7 @@ function Mypokemon() {
                     Release All
                 </Button>
             </div>
-            <ul className={css`display: inline-block;`}>
+            <ul className={css`display: block;`}>
                 {
                     getMyPokemons().length ? (
                         getMyPokemons().reverse().map((pokemon, index) => {
