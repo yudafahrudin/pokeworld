@@ -353,6 +353,7 @@ function PokemonDetail() {
                         loadingCatch ?
                             <img
                                 className={imageStyle}
+                                alt={`pokebal-gif`}
                                 src={require('../assets/pokeball-catching.gif')
                                 }
                             />
@@ -360,6 +361,7 @@ function PokemonDetail() {
                             <img
                                 className={imageStyle}
                                 src={pokemonImageUrl}
+                                alt={`pokemon-detail`}
                             />
                     }
                     <h1 className={pokemonTitle}>
@@ -375,9 +377,11 @@ function PokemonDetail() {
 
                 {/* BASIC INFO */}
                 <ul className={basicInfoContainer}>
-                    <h2 className={css`margin-top:10px`}>
-                        Basic Info :
-                    </h2>
+                    <li>
+                        <h2 className={css`margin-top:10px`}>
+                            Basic Info :
+                        </h2>
+                    </li>
                     <li className={css`display:flex;`}>
                         <p className={basicInfoLabel}>
                             HEIGHT :
@@ -400,9 +404,11 @@ function PokemonDetail() {
                 <ul
                     className={infoStatContainer}
                 >
-                    <h2>
-                        Stats :
-                    </h2>
+                    <li>
+                        <h2>
+                            Stats :
+                        </h2>
+                    </li>
                     {stats.map((stat, index) => (
                         <li key={index}
                             className={css`margin-bottom:10px;`}
@@ -431,9 +437,11 @@ function PokemonDetail() {
                 <ul
                     className={movesContainer}
                 >
-                    <h2>
-                        Moves :
-                    </h2>
+                    <li>
+                        <h2>
+                            Moves :
+                        </h2>
+                    </li>
                     {moves.map(({ move }, index) => (
                         <span key={index} className={css`font-size:13px`}>
                             {move.name}{moves.length - 1 !== index && ", "}
