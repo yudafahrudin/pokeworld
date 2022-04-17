@@ -54,8 +54,7 @@ function PokemonCardList({ pokemon, showOwnedPokemon = true, bgColor }) {
                     transition: all .5s;
                     `}
                     src={pokemon.image}
-                    width={"100%"}
-                    height={"auto"}
+                    width="100px"
                     alt={pokemon.nickname || pokemon.name}
                 />
             </div>
