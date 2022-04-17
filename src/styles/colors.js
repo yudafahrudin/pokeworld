@@ -8,6 +8,7 @@ export default {
     white: "#FFFFFF",
     white2: "#F5F5F5",
     gray: "#BDBDBD",
+    grayLight: "#F5F5F5",
     grayDisable: "#CCCCCC",
     grayDisableText: "#666666",
 };

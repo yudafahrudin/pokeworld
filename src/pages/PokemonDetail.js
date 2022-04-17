@@ -12,7 +12,7 @@ import {
 } from "../graphql/queries"
 
 // Helper
-import { localStorage, countMyPokemon } from '../helpers'
+import { localStorage, countMyPokemon, generateProbabilities } from '../helpers'
 import colors from "../styles/colors";
 
 // Style
@@ -126,14 +126,17 @@ function PokemonDetail() {
 
     // Presist
     const [getMyPokemons, setMyPokemons] = localStorage("mypokemon");
+    const [getProbPokemon] = localStorage("catchProbabilities");
 
     // State
     const [isModalOpen, setModalIsOpen] = useState(false);
     const [isModalWarningOpen, setIsModalWarningOpen] = useState(false);
+    const [isModalPokemonRun, setIsModalPokemonRun] = useState(false);
     const [loadingCatch, setLoadingCatch] = useState(false);
     const [totalOwnedPokemon, setTotalOwnedPokemon] = useState(0);
     const [nickname, setNickname] = useState("");
     const [isMultipleCatch, setIsMultipleCatch] = useState(false);
+    const [probabilityReached, setProbabilityReached] = useState(0);
 
     const { loading, data } = useQuery(GET_POKEMON_DETAIL, {
         fetchPolicy: "cache-first",
@@ -141,6 +144,13 @@ function PokemonDetail() {
             name: params.name
         }
     })
+
+    useEffect(() => {
+        if (data) {
+            generateProbabilities(data?.pokemon?.name)
+        }
+        setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
+    }, [data])
 
     const handleOwnedSamePokemon = () => {
         let isExistingPokemon = false;
@@ -157,16 +167,29 @@ function PokemonDetail() {
     }
 
     const handleCatchPokemon = () => {
-        // if pocket not fully
-        if (getMyPokemons().length !== pocketCapacity) {
-            setLoadingCatch(true);
-            setTimeout(() => {
-                setModalIsOpen(true);
-                handleOwnedSamePokemon()
-            }, 2000)
-        } else {
-            setIsModalWarningOpen(true)
+        setLoadingCatch(true);
+
+        if (probabilityReached === getProbPokemon().probabilites.length) {
+            generateProbabilities(data?.pokemon?.name)
+            setProbabilityReached(0)
         }
+
+        const probailityPokemonCatched = getProbPokemon().probabilites[probabilityReached]
+
+        if (probailityPokemonCatched) {
+            // if pocket not fully
+            if (getMyPokemons().length !== pocketCapacity) {
+                setTimeout(() => {
+                    setModalIsOpen(true);
+                    handleOwnedSamePokemon()
+                }, 2000)
+            } else {
+                setIsModalWarningOpen(true)
+            }
+        } else {
+            setIsModalPokemonRun(true)
+        }
+        setProbabilityReached(probabilityReached + 1)
     }
 
     const handleAddToPocketValidation = () => {
@@ -204,10 +227,6 @@ function PokemonDetail() {
     const handleInputChange = (event) => {
         setNickname(event.target.value ?? "")
     }
-
-    useEffect(() => {
-        setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
-    }, [data])
 
     const ModalCatchPokemon = () => (
         <Modal
@@ -273,6 +292,21 @@ function PokemonDetail() {
         </Modal>
     )
 
+    const ModalPokemonRun = () => (
+        <Modal
+            isOpen={isModalPokemonRun}
+            onClick={() => setIsModalPokemonRun(false)}
+        >
+            <div className={modalContainer}>
+                <h1>SORRY</h1>
+                This Pokemon really strong :(
+                <p
+                    className={css`font-weight:bold;color:red;`}
+                >owned pokemon : 10/10</p>
+            </div>
+        </Modal>
+    )
+
     if (loading) return <WaitingText />
 
     if (data) {
@@ -282,6 +316,7 @@ function PokemonDetail() {
             <div className={container}>
                 {ModalCatchPokemon()}
                 {ModalWarning()}
+                {ModalPokemonRun()}
                 <div className={headerInfoContainer}>
                     <span className={headerInfoText}>
                         owned : {totalOwnedPokemon}

@@ -7,6 +7,7 @@ import { localStorage } from '../helpers'
 
 import { POCKET_CAPACITY } from '../constants/general'
 
+import { md } from '../styles/breakpoints'
 import colors from '../styles/colors'
 
 const container = css`
@@ -136,38 +137,56 @@ function Mypokemon() {
                 </Button>
             </div>
             <ul>
-                {
-                    getMyPokemons().length ? (
-                        getMyPokemons().reverse().map((pokemon, index) => {
-                            return (
-                                <div key={index}>
-                                    <PokemonCardList
-                                        pokemon={pokemon}
-                                        bgColor="default"
-                                        showOwnedPokemon={false}
-                                    />
-                                    <div
-                                        className={css`
-                                        margin-bottom:30px;
+                <div
+                    className={css`width:100%;background:red;`}
+                >
+                    {
+                        getMyPokemons().length ? (
+                            getMyPokemons().reverse().map((pokemon, index) => {
+                                return (
+                                    <div key={index} className={css`
+                                @media (min-width: ${md}) {
+                                    width:50%;
+                                }
+                                @media (max-width: ${md}) {
+                                    width:100%;
+                                }
+                                float:left;
+                                `}>
+                                        <PokemonCardList
+                                            pokemon={pokemon}
+                                            bgColor="default"
+                                            float={false}
+                                            showOwnedPokemon={false}
+                                            style={css`border-radius:0px;box-shadow:none`}
+                                        />
+                                        <div
+                                            className={css`
+                                            background:${colors.grayLight};
+                                            margin-top:-10px;
+                                            margin-bottom:30px;
+                                            padding:10px;
+                                            padding-top:0px;
                                         `}
-                                    >
-                                        <Button
-                                            onClick={() => handleOpenModal(pokemon.nickname || pokemon.name)}
-                                            bgColor="warning"
                                         >
-                                            Release {pokemon.nickname || pokemon.name}
-                                        </Button>
+                                            <Button
+                                                onClick={() => handleOpenModal(pokemon.nickname || pokemon.name)}
+                                                bgColor="warning"
+                                            >
+                                                Release {pokemon.nickname || pokemon.name}
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
+                                )
+                            }
                             )
-                        }
-                        )
-                    ) : <p className={textInfo}>
-                        You don't have pokemon.
-                        <br />go to catch
-                        <a href="/"> pokemon</a>
-                    </p>
-                }
+                        ) : <p className={textInfo}>
+                            You don't have pokemon.
+                            <br />go to catch
+                            <a href="/"> pokemon</a>
+                        </p>
+                    }
+                </div>
             </ul>
             <ModalConfirm />
         </div >

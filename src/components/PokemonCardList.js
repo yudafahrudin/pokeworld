@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { css } from '@emotion/css'
+import { css, cx } from '@emotion/css'
 
 import { countMyPokemon } from '../helpers'
+import { md } from '../styles/breakpoints'
 
-function PokemonCardList({ pokemon, showOwnedPokemon = true, bgColor }) {
+function PokemonCardList({ pokemon, style = css``, showOwnedPokemon = true, bgColor, float = true }) {
     const navigate = useNavigate();
     const enumColor = () => {
         switch (bgColor) {
@@ -26,8 +27,17 @@ function PokemonCardList({ pokemon, showOwnedPokemon = true, bgColor }) {
 
     return (
         <li
-            className={css`
-            width:100%;
+            className={cx(
+                css`
+            ${float &&
+                    `@media (min-width: ${md}) {
+                        width:50%;
+                    }
+                    @media (max-width: ${md}) {
+                        width:100%;
+                    }
+                    float:left;`
+                    }
             display:flex;
             cursor: pointer;
             border-radius:10px;
@@ -36,7 +46,9 @@ function PokemonCardList({ pokemon, showOwnedPokemon = true, bgColor }) {
             rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
             background-color: ${enumColor().bgColor};
             color: ${enumColor().fontColor};
-            `}
+            `,
+                style
+            )}
             onClick={() => handleRedirectPokemonDetail({
                 name: pokemon.name,
                 image: pokemon.image,
