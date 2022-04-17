@@ -359,7 +359,7 @@ function PokemonDetail() {
                             :
                             <img
                                 className={imageStyle}
-                                src={pokemonDreamworldUrl}
+                                src={pokemonImageUrl}
                             />
                     }
                     <h1 className={pokemonTitle}>
