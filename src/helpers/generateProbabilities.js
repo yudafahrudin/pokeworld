@@ -5,22 +5,22 @@ const [getProb, setProb] = localStorage("catchProbabilities");
 
 const generateProbabilities = (pokemonName = "bulbasour") => {
     const NA = [...Array(4).keys()];
-    const NS = NA.length / 100 * 50; // 50% threshold
-    let probabilites = [];
+    const NS = NA.length / 100 * 50; // threshold 50% 
     let probVal;
     let index = 0;
     let name = pokemonName;
-    let isBreakRand = false;
+    let probabilites = [];
+    let isBreakRandom = false;
 
     NA.forEach(() => {
-        if (!isBreakRand) {
+        if (!isBreakRandom) {
             probVal = Boolean(Math.floor(Math.random() * 4))
         }
 
         probabilites[index] = probVal;
 
         if (probabilites.filter(val => val === probVal).length === NS) {
-            isBreakRand = true;
+            isBreakRandom = true;
             probVal = !probVal
         }
 

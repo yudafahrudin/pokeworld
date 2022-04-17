@@ -147,12 +147,13 @@ function PokemonDetail() {
 
     useEffect(() => {
         if (data) {
+            // Initialize probabilities
             generateProbabilities(data?.pokemon?.name)
         }
         setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
     }, [data])
 
-    const handleOwnedSamePokemon = () => {
+    const handleExistingPokemon = () => {
         let isExistingPokemon = false;
 
         if (getMyPokemons().length) {
@@ -166,19 +167,18 @@ function PokemonDetail() {
         }
     }
 
-    const handleCatchPokemon = () => {
+    const handleCatchPossibilities = () => {
         const { probabilites } = getProbPokemon()
+        const pokemonCaught = probabilites[probabilityReached]
 
         setLoadingCatch(true);
 
-        const probailityPokemonCatched = probabilites[probabilityReached]
-
         // if pocket not fully
         if (getMyPokemons().length !== pocketCapacity) {
-            if (probailityPokemonCatched) {
+            if (pokemonCaught) {
                 setTimeout(() => {
                     setIsModalCatchPokemon(true);
-                    handleOwnedSamePokemon()
+                    handleExistingPokemon()
                 }, 2000)
             } else {
                 setIsModalPokemonRun(true)
@@ -189,14 +189,17 @@ function PokemonDetail() {
 
         // set next probability
         setProbabilityReached(probabilityReached + 1)
+    }
 
+    useEffect(() => {
         // if the probability at the end of array
         // let's regenerate the probability for the next catch
-        if (probabilityReached === probabilites.length) {
+        if (probabilityReached === getProbPokemon().probabilites.length) {
             generateProbabilities(data?.pokemon?.name)
             setProbabilityReached(0)
         }
-    }
+    }, [probabilityReached])
+
 
     const handleAddToPocketValidation = () => {
         if (isMultipleCatch && nickname) {
@@ -337,7 +340,7 @@ function PokemonDetail() {
                     </span>
                     <Button
                         bgColor="primary"
-                        onClick={handleCatchPokemon}
+                        onClick={handleCatchPossibilities}
                         disabled={loadingCatch}
                         style={headerInfoButton}
                     >
