@@ -7,13 +7,29 @@ import { localStorage } from '../helpers'
 
 import { POCKET_CAPACITY } from '../constants/general'
 
+import colors from '../styles/colors'
+
 const container = css`
     margin: 20px 0;
 `
+const containerCapacity = css`
+    display:flex; 
+    justify-content: space-between;
+    height:40px`
+
 const textCapacity = css`
     font-weight:bold;
-    font-size:15px;
-`
+    font-size:15px;`
+
+const textInfo = css`
+    text-align:center;
+    font-size:14px;
+    color:${colors.gray};
+        a {
+            text-decoration:none;
+            color:${colors.primary};
+        }`
+
 const modalContainer = css`
     width:80vw;
     max-height:50vh;
@@ -29,6 +45,7 @@ const modalContainer = css`
 function Mypokemon() {
     const [getMyPokemons, setMyPokemons] = localStorage("mypokemon");
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isReleaseAll, setIsReleaseAll] = useState(false);
     const [idPokemon, setIdPokemon] = useState(0);
 
     const countCapacity = () => {
@@ -41,15 +58,31 @@ function Mypokemon() {
         setIdPokemon(id)
     }
 
+    const handleOpenModalReleaseAll = () => {
+        setIsModalOpen(true)
+        setIsReleaseAll(true)
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        setIsReleaseAll(false)
+        setIdPokemon(0)
+    }
+
     const handleReleasePokemon = () => {
-        if (idPokemon) {
+        if (idPokemon && !isReleaseAll) {
             const notReleasedPokemon = getMyPokemons().filter(
                 pokemon => (pokemon.nickname || pokemon.name) !== idPokemon
             );
             setMyPokemons(notReleasedPokemon);
-            setIsModalOpen(false)
             setIdPokemon(0);
         }
+
+        if (isReleaseAll) {
+            setMyPokemons([])
+        }
+
+        setIsModalOpen(false)
     }
 
     const ModalConfirm = () => (
@@ -62,17 +95,15 @@ function Mypokemon() {
                 </h3>
                 <div className={css`margin-bottom:10px`}>
                     <Button
-                        bgColor="warning"
+                        bgColor={isReleaseAll ? "danger" : "warning"}
                         onClick={() => handleReleasePokemon()}
                     >
-                        Release Pokemon
+                        Release {isReleaseAll && "all"} Pokemon
                     </Button>
                     <Button
                         bgColor="default"
-                        style={css`
-                        margin-left:10px
-                        `}
-                        onClick={() => setIsModalOpen(false)}
+                        style={css`margin-left:10px`}
+                        onClick={handleCloseModal}
                     >
                         cancel
                     </Button>
@@ -85,16 +116,25 @@ function Mypokemon() {
         <div
             className={container}
         >
-            <p
-                className={
-                    cx(
-                        textCapacity,
-                        css`${countCapacity()}`
-                    )
-                }
-            >
-                pocket capacity : {getMyPokemons().length} / {POCKET_CAPACITY}
-            </p>
+            <div className={containerCapacity}>
+                <p
+                    className={
+                        cx(
+                            textCapacity,
+                            css`${countCapacity()}`
+                        )
+                    }
+                >
+                    pocket capacity : {getMyPokemons().length} / {POCKET_CAPACITY}
+                </p>
+                <Button
+                    bgColor="danger"
+                    onClick={handleOpenModalReleaseAll}
+                    style={!getMyPokemons().length && css`visibility: hidden;`}
+                >
+                    Release All
+                </Button>
+            </div>
             <ul>
                 {
                     getMyPokemons().length ? (
@@ -117,24 +157,15 @@ function Mypokemon() {
                                         >
                                             Release {pokemon.nickname || pokemon.name}
                                         </Button>
-                                        <Button
-                                            bgColor="default"
-                                            style={css`margin-left:20px`}
-                                        >
-                                            Rename pokemon
-                                        </Button>
                                     </div>
                                 </div>
                             )
                         }
                         )
-                    ) : <p className={css`
-                        text-align:center;
-                        font-size:14px;
-                        color:#dadad3;
-                    `}>
-                        You don't have pokemon. <br />go to catch
-                        <a className={css`text-decoration:none;color:#03a9f4;`} href="/"> pokemon</a>
+                    ) : <p className={textInfo}>
+                        You don't have pokemon.
+                        <br />go to catch
+                        <a href="/"> pokemon</a>
                     </p>
                 }
             </ul>

@@ -33,6 +33,8 @@ function Button({ children, fullWidth, disabled, style = css``, bgColor, onClick
         return { bgColor: colors.white2, fontColor: colors.black };
       case "warning":
         return { bgColor: colors.warning, fontColor: colors.black };
+      case "danger":
+        return { bgColor: colors.danger, fontColor: colors.white };
       default:
         return { bgColor: colors.white, fontColor: colors.black };
     }

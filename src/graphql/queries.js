@@ -27,6 +27,11 @@ query pokemon_detail($name: String!) {
           name
         }
       },
+    moves {
+        move {
+          name
+        }
+    }
     stats {
       base_stat,
       effort,

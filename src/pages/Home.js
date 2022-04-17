@@ -13,7 +13,7 @@ const pageDetail = css`
     padding:5px;
 `
 function Home() {
-    const limit = 5;
+    const limit = 10;
     const offset = 0;
     const [pokemonList, setPokemonList] = useState([])
     const [isFetching, setIsFetching] = useState(false)

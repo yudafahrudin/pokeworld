@@ -13,6 +13,7 @@ import {
 
 // Helper
 import { localStorage, countMyPokemon } from '../helpers'
+import colors from "../styles/colors";
 
 // Style
 const container = css`
@@ -95,6 +96,13 @@ const infoStatPowerContainer = css`
     border-radius:5px;
     background:#E6E6E6;`
 
+const movesContainer = css`
+    margin-bottom:0px;
+    list-style:none;
+    padding:10px;
+    border-radius:10px;
+    background:#F2F2F2;`
+
 const modalContainer = css`
     width:80vw;
     max-height:50vh;
@@ -134,18 +142,6 @@ function PokemonDetail() {
         }
     })
 
-    const handleCatchPokemon = () => {
-        if (getMyPokemons().length !== pocketCapacity) {
-            setLoadingCatch(true);
-            setTimeout(() => {
-                setModalIsOpen(true);
-                handleOwnedSamePokemon()
-            }, 2000)
-        } else {
-            setIsModalWarningOpen(true)
-        }
-    }
-
     const handleOwnedSamePokemon = () => {
         let isExistingPokemon = false;
 
@@ -160,38 +156,52 @@ function PokemonDetail() {
         }
     }
 
-    const handleAddToPocket = () => {
-        if (!isMultipleCatch) {
-            setMyPokemons(
-                [...getMyPokemons(), {
-                    nickname,
-                    id: data?.pokemon?.id,
-                    image: pokemonImageUrl,
-                    name: data?.pokemon?.name,
-                    dreamworld: pokemonDreamworldUrl
-                }
-                ])
-            setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
-            setLoadingCatch(false)
-            setModalIsOpen(false);
+    const handleCatchPokemon = () => {
+        // if pocket not fully
+        if (getMyPokemons().length !== pocketCapacity) {
+            setLoadingCatch(true);
+            setTimeout(() => {
+                setModalIsOpen(true);
+                handleOwnedSamePokemon()
+            }, 2000)
+        } else {
+            setIsModalWarningOpen(true)
         }
+    }
+
+    const handleAddToPocketValidation = () => {
+        if (isMultipleCatch && nickname) {
+            handleAddToPocket()
+        }
+        if (!isMultipleCatch) {
+            handleAddToPocket()
+        }
+    }
+
+    const handleAddToPocket = () => {
+        setMyPokemons(
+            [...getMyPokemons(), {
+                nickname,
+                id: data?.pokemon?.id,
+                image: pokemonImageUrl,
+                name: data?.pokemon?.name,
+                dreamworld: pokemonDreamworldUrl
+            }
+            ])
+        setIsMultipleCatch(false);
+        setLoadingCatch(false)
+        setModalIsOpen(false);
+        setTotalOwnedPokemon(countMyPokemon(data?.pokemon?.name))
     }
 
     const handleRelease = () => {
+        setNickname("")
         setLoadingCatch(false)
         setModalIsOpen(false);
-        setNickname("")
+        setIsMultipleCatch(false)
     }
 
     const handleInputChange = (event) => {
-        if (isMultipleCatch) {
-            if (event.target.value) {
-                setIsMultipleCatch(false);
-            } else {
-                setIsMultipleCatch(true);
-            }
-        }
-
         setNickname(event.target.value ?? "")
     }
 
@@ -221,9 +231,9 @@ function PokemonDetail() {
                         onChange={handleInputChange}
                     />
                     {
-                        isMultipleCatch && (
+                        (isMultipleCatch && !nickname) && (
                             <div>
-                                <p className={css`font-size:14px;color:red`}>
+                                <p className={css`font-size:14px;color:${colors.danger}`}>
                                     You already have  {data?.pokemon?.name}.
                                     <br /> Please give it a name.
                                 </p>
@@ -232,7 +242,7 @@ function PokemonDetail() {
                     }
                 </div>
                 <div className={css`margin-bottom:10px`}>
-                    <Button bgColor="primary" onClick={handleAddToPocket}>
+                    <Button bgColor="primary" onClick={handleAddToPocketValidation}>
                         Add to my pocket
                     </Button>
                     <Button
@@ -263,115 +273,124 @@ function PokemonDetail() {
         </Modal>
     )
 
-    return (
-        <div className={container}>
+    if (loading) return <WaitingText />
 
-            {ModalCatchPokemon()}
-            {ModalWarning()}
+    if (data) {
+        const { name, height, weight, types, stats, moves } = data?.pokemon;
 
-            {
-                loading ? <WaitingText /> :
-                    (
-                        <>
-                            <div className={headerInfoContainer}>
-                                <span className={headerInfoText}>
-                                    owned : {totalOwnedPokemon}
-                                </span>
-                                <Button
-                                    bgColor="primary"
-                                    onClick={handleCatchPokemon}
-                                    disabled={loadingCatch}
-                                    style={headerInfoButton}
+        return (
+            <div className={container}>
+                {ModalCatchPokemon()}
+                {ModalWarning()}
+                <div className={headerInfoContainer}>
+                    <span className={headerInfoText}>
+                        owned : {totalOwnedPokemon}
+                    </span>
+                    <Button
+                        bgColor="primary"
+                        onClick={handleCatchPokemon}
+                        disabled={loadingCatch}
+                        style={headerInfoButton}
+                    >
+                        Catch
+                    </Button>
+                </div>
+
+                <div className={imageContainer}>
+                    {
+                        loadingCatch ?
+                            <img
+                                className={imageStyle}
+                                src={require('../assets/pokeball-catching.gif')
+                                }
+                            />
+                            :
+                            <img
+                                className={imageStyle}
+                                src={pokemonDreamworldUrl}
+                            />
+                    }
+                    <h1 className={pokemonTitle}>
+                        {name}
+                    </h1>
+                    {types?.map(({ type }, index) => (
+                        <p key={index} className={pokemonTypeLabel}>
+                            {type?.name}
+                        </p>
+                    ))
+                    }
+                </div>
+
+                {/* BASIC INFO */}
+                <ul className={basicInfoContainer}>
+                    <h2 className={css`margin-top:10px`}>
+                        Basic Info :
+                    </h2>
+                    <li className={css`display:flex;`}>
+                        <p className={basicInfoLabel}>
+                            HEIGHT :
+                        </p>
+                        <p className={basicInfoText}>
+                            {height / 10}m
+                        </p>
+                    </li>
+                    <li className={css`display:flex;`}>
+                        <p className={basicInfoLabel}>
+                            HEIGHT :
+                        </p>
+                        <p className={basicInfoText}>
+                            {weight / 10}kg
+                        </p>
+                    </li>
+                </ul>
+
+                {/* STATS INFORMATION */}
+                <ul
+                    className={infoStatContainer}
+                >
+                    <h2>
+                        Stats :
+                    </h2>
+                    {stats.map((stat, index) => (
+                        <li key={index}
+                            className={css`margin-bottom:10px;`}
+                        >
+                            <>
+                                <div
+                                    className={infoStatLabel}
                                 >
-                                    Catch
-                                </Button>
-                            </div>
-
-                            <div className={imageContainer}>
-                                {
-                                    loadingCatch ?
-                                        <img
-                                            className={imageStyle}
-                                            src={require('../assets/pokeball-catching.gif')
-                                            }
-                                        />
-                                        :
-                                        <img
-                                            className={imageStyle}
-                                            src={pokemonDreamworldUrl}
-                                        />
-                                }
-                                <h1 className={pokemonTitle}>
-                                    {data?.pokemon?.name}
-                                </h1>
-                                {
-                                    data?.pokemon?.types?.map(({ type }, index) => (
-                                        <p key={index} className={pokemonTypeLabel}>
-                                            {type?.name}
-                                        </p>
-                                    ))
-                                }
-                            </div>
-
-                            {/* BASIC INFO */}
-                            <ul className={basicInfoContainer}>
-                                <h2 className={css`margin-top:10px`}>
-                                    Basic Info :
-                                </h2>
-                                <li className={css`display:flex;`}>
-                                    <p className={basicInfoLabel}>
-                                        HEIGHT :
-                                    </p>
-                                    <p className={basicInfoText}>
-                                        {data?.pokemon?.height / 10}m
-                                    </p>
-                                </li>
-                                <li className={css`display:flex;`}>
-                                    <p className={basicInfoLabel}>
-                                        HEIGHT :
-                                    </p>
-                                    <p className={basicInfoText}>
-                                        {data?.pokemon?.weight / 10}kg
-                                    </p>
-                                </li>
-                            </ul>
-
-                            {/* STATS INFORMATION */}
-                            <ul
-                                className={infoStatContainer}
-                            >
-                                <h2>
-                                    Stats :
-                                </h2>
-                                {data?.pokemon?.stats.map((stat, index) => (
-                                    <li key={index}
-                                        className={css`margin-bottom:10px;`}
-                                    >
-                                        <>
-                                            <div
-                                                className={infoStatLabel}
-                                            >
-                                                {stat.stat.name.toUpperCase()} :
-                                            </div>
-                                            <div className={infoStatPowerContainer}>
-                                                <div className={
-                                                    cx(
-                                                        infoStatPower,
-                                                        css`width: ${stat.base_stat * 2}px;`
-                                                    )
-                                                }>
-                                                    {stat.base_stat}
-                                                </div>
-                                            </div>
-                                        </>
-                                    </li>
-                                ))}
-                            </ul>
-                        </>
-                    )
-            }
-        </div >
-    )
+                                    {stat.stat.name.toUpperCase()} :
+                                </div>
+                                <div className={infoStatPowerContainer}>
+                                    <div className={
+                                        cx(
+                                            infoStatPower,
+                                            css`width: ${stat.base_stat * 2}px;`
+                                        )
+                                    }>
+                                        {stat.base_stat}
+                                    </div>
+                                </div>
+                            </>
+                        </li>
+                    ))}
+                </ul>
+                {/* MOVE INFORMATION */}
+                <ul
+                    className={movesContainer}
+                >
+                    <h2>
+                        Moves :
+                    </h2>
+                    {moves.map(({ move }, index) => (
+                        <span key={index} className={css`font-size:13px`}>
+                            {move.name}{moves.length - 1 !== index && ", "}
+                        </span>
+                    ))}
+                </ul>
+            </div >
+        )
+    }
 }
 
 export default PokemonDetail;
