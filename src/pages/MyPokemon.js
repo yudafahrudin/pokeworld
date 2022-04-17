@@ -177,13 +177,16 @@ function Mypokemon() {
                             )
                         }
                         )
-                    ) : <p className={textInfo}>
-                        You don't have pokemon.
-                        <br />go to catch
-                        <a href="/"> pokemon</a>
-                    </p>
+                    ) : <></>
                 }
             </ul>
+            {
+                !getMyPokemons().length && (<p className={textInfo}>
+                    You don't have pokemon.
+                    <br />go to catch
+                    <a href="/"> pokemon</a>
+                </p>)
+            }
             <ModalConfirm />
         </div >
     )
