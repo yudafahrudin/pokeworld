@@ -194,7 +194,7 @@ function PokemonDetail() {
     useEffect(() => {
         // if the probability at the end of array
         // let's regenerate the probability for the next catch
-        if (probabilityReached === getProbPokemon().probabilites.length) {
+        if (probabilityReached === getProbPokemon()?.probabilites?.length) {
             generateProbabilities(data?.pokemon?.name)
             setProbabilityReached(0)
         }
