@@ -1,12 +1,18 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { css, cx } from '@emotion/css'
 
 import { countMyPokemon } from '../helpers'
 import { md } from '../styles/breakpoints'
 
-function PokemonCardList({ children, pokemon, style = css``, showOwnedPokemon = true, bgColor, float = true }) {
-    const navigate = useNavigate();
+function PokemonCardList({
+    children,
+    pokemon,
+    style = css``,
+    showOwnedPokemon = true,
+    bgColor,
+    handleRedirectPokemonDetail = () => { },
+    float = true
+}) {
 
     const enumColor = () => {
         switch (bgColor) {
@@ -21,23 +27,18 @@ function PokemonCardList({ children, pokemon, style = css``, showOwnedPokemon = 
         }
     }
 
-    const handleRedirectPokemonDetail = (pokemonData) => {
-        const { name, image, dreamworld } = pokemonData;
-        navigate(`/pokemon-detail/${name}?image=${btoa(image)}&dreamworld=${btoa(dreamworld)}`)
-    }
-
     return (
         <li
             className={cx(
                 css`
-            ${float &&
-                    `@media (min-width: ${md}) {
-                        width:50%;
-                    }
-                    @media (max-width: ${md}) {
-                        width:100%;
-                    }
-                    float:left;`
+            ${float && `
+            @media (min-width: ${md}) {
+                width:50%;
+            }
+            @media (max-width: ${md}) {
+                width:100%;
+            }
+                float:left;`
                     }
             display:flex;
             cursor: pointer;

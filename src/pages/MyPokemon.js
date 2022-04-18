@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { css, cx } from '@emotion/css'
+import { useNavigate } from "react-router-dom";
 
 import { PokemonCardList, Button, Modal } from '../components'
 
@@ -45,6 +46,7 @@ const modalContainer = css`
 `
 
 function Mypokemon() {
+    const navigate = useNavigate();
     const [getMyPokemons, setMyPokemons] = localStorage("mypokemon");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isReleaseAll, setIsReleaseAll] = useState(false);
@@ -86,6 +88,12 @@ function Mypokemon() {
 
         setIsModalOpen(false)
     }
+
+    const handleRedirectPokemonDetail = (pokemonData) => {
+        const { name, image, dreamworld } = pokemonData;
+        navigate(`/pokemon-detail/${name}?image=${btoa(image)}&dreamworld=${btoa(dreamworld)}`)
+    }
+
 
     const ModalConfirm = () => (
         <Modal
@@ -154,10 +162,11 @@ function Mypokemon() {
                                 float:left;
                                 `}>
                                     <PokemonCardList
-                                        pokemon={pokemon}
                                         float={false}
+                                        pokemon={pokemon}
                                         showOwnedPokemon={false}
                                         style={css`margin:10px`}
+                                        handleRedirectPokemonDetail={handleRedirectPokemonDetail}
                                     />
                                     <div
                                         className={css`

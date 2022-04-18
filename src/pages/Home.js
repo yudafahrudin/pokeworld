@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLazyQuery } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 import { css } from '@emotion/css'
 
 import { WaitingText, Button, PokemonCardList } from '../components'
@@ -28,6 +29,7 @@ const scrollTopStyle = css`
 function Home() {
     const limit = 10;
     const offset = 0;
+    const navigate = useNavigate();
     const [pokemonList, setPokemonList] = useState([])
     const [isFetching, setIsFetching] = useState(false)
 
@@ -83,6 +85,11 @@ function Home() {
         });
     }, [])
 
+    const handleRedirectPokemonDetail = (pokemonData) => {
+        const { name, image, dreamworld } = pokemonData;
+        navigate(`/pokemon-detail/${name}?image=${btoa(image)}&dreamworld=${btoa(dreamworld)}`)
+    }
+
     return (
         <>
             <p className={pageDetail}>
@@ -102,6 +109,7 @@ function Home() {
                             return (
                                 <PokemonCardList
                                     pokemon={pokemon}
+                                    handleRedirectPokemonDetail={handleRedirectPokemonDetail}
                                     key={index + `pokemon-list`}
                                 />
                             )
