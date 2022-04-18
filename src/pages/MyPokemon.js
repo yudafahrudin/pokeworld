@@ -26,6 +26,7 @@ const textCapacity = css`
 const textInfo = css`
     text-align:center;
     font-size:14px;
+    font-weight:bold;
     color:${colors.gray};
         a {
             text-decoration:none;
