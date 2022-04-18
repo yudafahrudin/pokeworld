@@ -118,9 +118,8 @@ function Mypokemon() {
     )
 
     return (
-        <div
-            className={container}
-        >
+        <div className={container}>
+            <h2 className={css`margin-left:10px`}>My Pokemon</h2>
             <div className={containerCapacity}>
                 <p
                     className={

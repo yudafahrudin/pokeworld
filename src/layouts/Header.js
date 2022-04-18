@@ -6,7 +6,10 @@ import colors from '../styles/colors'
 
 const container = css`
     width:100%;
-    max-height:15vh;`
+    max-height:15vh;
+    margin-bottom:25px;
+    background: rgb(6,121,177);
+    background: linear-gradient(90deg, rgba(6,121,177,1) 0%, rgba(0,148,179,1) 100%);`
 
 const wrapper = css`
     width:60vw;
@@ -22,7 +25,7 @@ const nav = css`
 
 const logo = css`
     text-decoration: none;
-    color: ${colors.title};`
+    color: ${colors.white};`
 
 const menu = css`
     display:inline-flex;
@@ -34,12 +37,13 @@ const menuItem = css`
     margin: 0 2px;
     overflow: hidden;
     a {
-        line-height:25px;
         display: block;
         text-decoration: none;
         font-weight: bold;
-        height: 100%;
-        color:${colors.primary};
+        padding:5px;
+        border-radius:5px;
+        border:1px solid ${colors.white2};
+        color:${colors.white};
     }`
 
 function Header() {

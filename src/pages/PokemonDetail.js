@@ -57,9 +57,9 @@ const pokemonTypeLabel = css`
 const basicInfoContainer = css`
     margin-bottom:0px;
     list-style:none;
-    padding:10px;
+    padding:15px;
     border-radius:10px;
-    background:#F2F2F2;`
+    background: ${colors.white};`
 
 const basicInfoLabel = css`
     font-size:12px;
@@ -76,8 +76,8 @@ const basicInfoText = css`
 
 const infoStatContainer = css`
     list-style:none;
-    margin-top:0px;
-    padding:10px 10px 10px 0;
+    background: ${colors.white};
+    padding:15px;
     border-radius:10px;`
 
 const infoStatLabel = css`
@@ -87,7 +87,7 @@ const infoStatLabel = css`
 
 const infoStatPower = css`
     display:block;
-    background:#559EDF;
+    background:${colors.primary};
     padding:2px 2px 2px 10px;
     color:#ffffff;
     font-weight:bold;`
@@ -95,14 +95,16 @@ const infoStatPower = css`
 const infoStatPowerContainer = css`
     width:100%;
     border-radius:5px;
-    background:#E6E6E6;`
+    background:#CFE9FF;`
+// background:${colors.white};`
 
 const movesContainer = css`
     margin-bottom:0px;
     list-style:none;
-    padding:10px;
+    padding:15px;
+    padding-bottom:20px;
     border-radius:10px;
-    background:#F2F2F2;`
+    background:${colors.white};`
 
 const modalContainer = css`
     max-height:50vh;
@@ -332,6 +334,7 @@ function PokemonDetail() {
 
         return (
             <div className={container}>
+                <h2>Pokemon Detail</h2>
                 {ModalCatchPokemon()}
                 {ModalPocketFull()}
                 {ModalPokemonRun()}
