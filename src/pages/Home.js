@@ -2,16 +2,29 @@ import React, { useState, useEffect } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { css } from '@emotion/css'
 
-import { WaitingText, PokemonCardList } from '../components'
+import { WaitingText, Button, PokemonCardList } from '../components'
 
 import {
     GET_POKEMON_LIST
 } from '../graphql/queries'
+import colors from "../styles/colors";
 
 const pageDetail = css`
     font-size:.85rem;
-    padding:5px;
-`
+    padding:5px;`
+
+const scrollTopStyle = css`
+    right:5vw;
+    bottom:5vh;
+    font-size:25px;
+    position:fixed;
+    font-weight:bold;
+    border-radius:10px;
+    padding:10px 15px 10px 15px;
+    cursor:pointer;
+    background-color: rgb(6,121,177) !important;
+    color: ${colors.white} !important;`
+
 function Home() {
     const limit = 10;
     const offset = 0;
@@ -35,6 +48,14 @@ function Home() {
         if (!isFetching) return;
         fetchMoreListItems();
     }, [isFetching]);
+
+    function handleScrollToTop() {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        })
+    }
 
     function handleScroll() {
         if (window.innerHeight + document.documentElement.scrollTop + 1 <= document.documentElement.offsetHeight || isFetching) return;
@@ -68,6 +89,12 @@ function Home() {
                 Welcome Traine~ the Pokeworld contains detailed stats for every creature
                 from the pokemon world.
             </p>
+            <Button
+                style={scrollTopStyle}
+                onClick={handleScrollToTop}
+            >
+                ^
+            </Button>
             <ul>
                 {
                     pokemonList.length ? (

@@ -7,6 +7,7 @@ import { md } from '../styles/breakpoints'
 
 function PokemonCardList({ children, pokemon, style = css``, showOwnedPokemon = true, bgColor, float = true }) {
     const navigate = useNavigate();
+
     const enumColor = () => {
         switch (bgColor) {
             case "primary":
