@@ -13,7 +13,7 @@ import {
 
 // Helper
 import { localStorage, countMyPokemon, generateProbabilities } from '../helpers'
-import colors from "../styles/colors";
+import colors from "../styles/colors"
 
 // Style
 const container = css`
@@ -32,7 +32,8 @@ const headerInfoButton = css`
     height:35px !important;`
 
 const imageContainer = css`
-    text-align:center`
+    text-align:center;
+    display:block;`
 
 const imageStyle = css`
     width:250px;
@@ -353,15 +354,18 @@ function PokemonDetail() {
                         loadingCatch ?
                             <img
                                 className={imageStyle}
+                                src={require('../assets/pokeball-catching.gif')}
                                 alt={`pokebal-gif`}
-                                src={require('../assets/pokeball-catching.gif')
-                                }
+                                width="250px"
+                                height="190px"
                             />
                             :
                             <img
                                 className={imageStyle}
                                 src={pokemonDreamworldUrl}
                                 alt={`pokemon-detail`}
+                                width="250px"
+                                height="250px"
                             />
                     }
                     <h1 className={pokemonTitle}>
