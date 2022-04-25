@@ -5,8 +5,9 @@ module.exports = {
     mode: "production",
     entry: "./src/index.js",
     output: {
-        filename: '[name].chunk.js',
+        filename: '[id]-[fullhash].chunk.js',
         path: path.resolve(__dirname, 'dist'),
+        clean: true,
     },
     resolve: {
         extensions: ['.js', '.jsx']
