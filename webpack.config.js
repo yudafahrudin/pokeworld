@@ -5,7 +5,7 @@ module.exports = {
     mode: "production",
     entry: "./src/index.js",
     output: {
-        filename: '[id]-[fullhash].chunk.js',
+        filename: '[name]-[id][fullhash].chunk.js',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
     },
@@ -41,9 +41,9 @@ module.exports = {
             filename: "./index.html"
         })
     ],
-    optimization: {
-        splitChunks: {
-            chunks: 'all',
-        },
-    },
+    // optimization: {
+    //     splitChunks: {
+    //         chunks: 'all',
+    //     },
+    // },
 };
