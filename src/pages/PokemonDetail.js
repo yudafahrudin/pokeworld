@@ -96,7 +96,6 @@ const infoStatPowerContainer = css`
     width:100%;
     border-radius:5px;
     background:#CFE9FF;`
-// background:${colors.white};`
 
 const movesContainer = css`
     margin-bottom:0px;
@@ -357,7 +356,7 @@ function PokemonDetail() {
                         loadingCatch ?
                             <img
                                 className={imageStyle}
-                                src={require('../assets/pokeball-catching.gif')}
+                                src={'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/de4b3e6a-73cd-44c4-a7e0-fc36afcadcb9/deri8tc-ae96762e-7325-4d77-87d3-28620add92f6.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2RlNGIzZTZhLTczY2QtNDRjNC1hN2UwLWZjMzZhZmNhZGNiOVwvZGVyaTh0Yy1hZTk2NzYyZS03MzI1LTRkNzctODdkMy0yODYyMGFkZDkyZjYuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.p3K2JKVPBrM76GJJJQuLl28e2CU5VO_foiHx2hRhvj0'}
                                 alt={`pokebal-gif`}
                                 width="250px"
                                 height="190px"
