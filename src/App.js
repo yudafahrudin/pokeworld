@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   ApolloClient,
   InMemoryCache,
@@ -14,9 +14,9 @@ import {
 import Container from './layouts/Container'
 
 // Pages
-import Home from './pages/Home'
-import Mypokemon from './pages/MyPokemon'
-import PokemonDetail from './pages/PokemonDetail'
+const Home = React.lazy(() => import('./pages/Home'))
+const MyPokemon = React.lazy(() => import('./pages/MyPokemon'))
+const PokemonDetail = React.lazy(() => import('./pages/PokemonDetail'))
 
 const client = new ApolloClient({
   uri: "https://graphql-pokeapi.graphcdn.app/graphql",
@@ -28,15 +28,17 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Router>
-        <Container>
-          <Switch>
-            <Route exact path="/" element={<Home />} />
-            <Route exact path="/my-pokemon" element={<Mypokemon />} />
-            <Route exact path="/pokemon-detail/:name" element={<PokemonDetail />} />
-          </Switch>
-        </Container>
-      </Router>
+      <Suspense fallback={<></>}>
+        <Router>
+          <Container>
+            <Switch>
+              <Route exact path="/" element={<Home />} />
+              <Route exact path="/my-pokemon" element={<MyPokemon />} />
+              <Route exact path="/pokemon-detail/:name" element={<PokemonDetail />} />
+            </Switch>
+          </Container>
+        </Router>
+      </Suspense>
     </ApolloProvider>
   );
 }
