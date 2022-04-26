@@ -2,12 +2,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
     entry: "./src/index.js",
     output: {
         publicPath: '/',
-        filename: '[name]-[id][fullhash].chunk.js',
+        filename: '[name]-[fullhash].chunk.js',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
     },
@@ -46,17 +47,19 @@ module.exports = {
         new MiniCssExtractPlugin()
     ],
     optimization: {
+        minimize: true,
         splitChunks: {
             chunks: 'all',
         },
         minimizer: [
             new CssMinimizerPlugin(),
+            new TerserPlugin()
         ],
     },
     performance: {
         hints: 'warning',
-        maxEntrypointSize: 1512000,
-        maxAssetSize: 1512000
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
     },
     devServer: {
         historyApiFallback: true,
