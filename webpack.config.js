@@ -5,7 +5,11 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: {
+        index: "./src/index.js",
+        helpers: "./src/helpers/index.js",
+        components: "./src/components/index.js"
+    },
     output: {
         publicPath: '/',
         filename: '[name]-[fullhash].chunk.js',
