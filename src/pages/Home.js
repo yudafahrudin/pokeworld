@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { css } from '@emotion/css'
 
 // Component
@@ -102,11 +101,6 @@ function Home() {
                 display:flex;
                 justify-content: space-between;
             `}>
-
-                <HCaptcha
-                    sitekey="f1d1b649-d854-4456-89fc-31c65bd938f4"
-                    onVerify={(token, ekey) => console.log(token, ekey)}
-                />
                 {/* <b>creator {developer}</b>
                 <b>{" "} versi {version}</b> */}
             </div>

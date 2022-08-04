@@ -61,6 +61,11 @@ function Header() {
                                 My Pokemon
                             </a>
                         </li>
+                        <li className={menuItem}>
+                            <a href="/hcaptcha">
+                                Hcaptcha
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </div>

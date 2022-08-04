@@ -20,6 +20,7 @@ import Container from './layouts/Container'
 const Home = React.lazy(() => import('./pages/Home'))
 const MyPokemon = React.lazy(() => import('./pages/MyPokemon'))
 const PokemonDetail = React.lazy(() => import('./pages/PokemonDetail'))
+const Hcaptcha = React.lazy(() => import('./pages/Hcaptcha'))
 
 
 const client = new ApolloClient({
@@ -41,6 +42,7 @@ function App() {
                 <Route exact path="/" element={<Home />} />
                 <Route exact path="/my-pokemon" element={<MyPokemon />} />
                 <Route exact path="/pokemon-detail/:name" element={<PokemonDetail />} />
+                <Route exact path="/hcaptcha" element={<Hcaptcha />} />
               </Switch>
             </DeveloperProvider>
           </Container>

@@ -6,6 +6,7 @@ function FormInput({
     style = css``,
     placeholder = "Please input text",
     onChange,
+    disabled,
     value
 }) {
     const defaultCss = css`
@@ -27,6 +28,7 @@ function FormInput({
             name={name}
             onChange={onChange}
             placeholder={placeholder}
+            disabled={Boolean(disabled)}
             className={cx(defaultCss, style)}
             value={value}
         />
