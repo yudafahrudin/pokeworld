@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { css } from '@emotion/css'
 
+// Component
 import { WaitingText, Button, PokemonCardList } from '../components'
+
+// Context
+import { DeveloperContext } from "./DeveloperContext";
 
 import {
     GET_POKEMON_LIST
@@ -30,6 +34,7 @@ function Home() {
     const limit = 10;
     const offset = 0;
     const navigate = useNavigate();
+    const { developer, version } = useContext(DeveloperContext);
     const [pokemonList, setPokemonList] = useState([])
     const [isFetching, setIsFetching] = useState(false)
 
@@ -92,6 +97,13 @@ function Home() {
 
     return (
         <>
+            <div className={css`
+                display:flex;
+                justify-content: space-between;
+            `}>
+                <b>creator {developer}</b>
+                <b>{" "} versi {version}</b>
+            </div>
             <p className={pageDetail}>
                 Welcome Traine~ the Pokeworld contains detailed stats for every creature
                 from the pokemon world.

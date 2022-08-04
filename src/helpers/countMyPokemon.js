@@ -3,13 +3,8 @@ import localStorage from './localStorage';
 const [getMyPokemons] = localStorage("mypokemon");
 
 const countMyPokemon = (name) => {
-    let count = 0;
-    getMyPokemons()?.forEach(pokemon => {
-        if (name === pokemon.name) {
-            count = count + 1
-        }
-    });
-    return count;
+    let count = getMyPokemons()?.filter(pokemon => name === pokemon.name);
+    return count.length;
 }
 
 export default countMyPokemon;
