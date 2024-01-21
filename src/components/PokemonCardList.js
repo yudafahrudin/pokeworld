@@ -43,7 +43,7 @@ function PokemonCardList({
             display:flex;
             cursor: pointer;
             border-radius:10px;
-            margin: 0 auto 10px auto;
+            margin: 0 auto 20px auto;
             box-shadow: rgba(9, 30, 66, 0.25) 0px 3px 4px -2px, 
             rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
             background-color: ${enumColor().bgColor};
@@ -58,7 +58,7 @@ function PokemonCardList({
             })}>
             <div className={css`
                 border-radius:10px;
-                padding:5px;
+                padding:10px;
                 height:100px;
                 width:100px;
                 max-width:100px;

@@ -42,7 +42,6 @@ const menuItem = css`
         font-weight: bold;
         padding:5px;
         border-radius:5px;
-        border:1px solid ${colors.white2};
         color:${colors.white};
     }`
 
