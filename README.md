@@ -19,7 +19,7 @@ Clone the repo
    ```sh
    git clone git@github.com:yudafahrudin/pokeworld.git
    ```
-Install packages using yarn
+Install packages using npm
    ```sh
    npm install
    ```
